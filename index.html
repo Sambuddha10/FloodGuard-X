@@ -1,20 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FloodGuard-X</title>
+
+    <title>FloodGuard-X | Flood Risk Detection</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>FloodGuard-X</h1>
+    <header>
+        <h1>🌊 FloodGuard-X</h1>
+        <p>Flood Risk Detection & Disaster Management System</p>
+    </header>
 
-    <p>Flood Risk Detection & Disaster Management System</p>
+    <main>
+
+        <section class="status-card">
+            <h2>Current Flood Risk</h2>
+
+            <div id="riskLevel">
+                LOW
+            </div>
+
+            <p id="riskMessage">
+                Current conditions indicate a low flood risk.
+            </p>
+        </section>
+
+
+        <section class="dashboard">
+
+            <div class="card">
+                <h3>🌧️ Rainfall</h3>
+                <p id="rainfall">20 mm</p>
+            </div>
+
+            <div class="card">
+                <h3>🌊 Water Level</h3>
+                <p id="waterLevel">1.2 m</p>
+            </div>
+
+            <div class="card">
+                <h3>💧 Soil Moisture</h3>
+                <p id="soilMoisture">40%</p>
+            </div>
+
+            <div class="card">
+                <h3>🌡️ Temperature</h3>
+                <p id="temperature">28°C</p>
+            </div>
+
+        </section>
+
+
+        <section class="simulation">
+
+            <h2>Flood Risk Simulator</h2>
+
+            <button onclick="runSimulation()">
+                Run Simulation
+            </button>
+
+            <p id="simulationResult">
+                Click the button to simulate flood conditions.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>FloodGuard-X | Disaster Management Research Project</p>
+    </footer>
+
 
     <script src="app.js"></script>
 
 </body>
+
 </html>

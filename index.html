@@ -57,19 +57,47 @@
         </section>
 
 
-        <section class="simulation">
+       <section class="simulation">
 
-            <h2>Flood Risk Simulator</h2>
+    <h2>🌊 Flood Risk Simulator</h2>
 
-            <button onclick="runSimulation()">
-                Run Simulation
-            </button>
+    <p>Select an environmental scenario:</p>
 
-            <p id="simulationResult">
-                Click the button to simulate flood conditions.
-            </p>
+    <select id="scenarioSelect">
 
-        </section>
+        <option value="random">
+            Random Conditions
+        </option>
+
+        <option value="normal">
+            Normal Conditions
+        </option>
+
+        <option value="heavyRain">
+            Heavy Rainfall
+        </option>
+
+        <option value="risingWater">
+            Rising Water Level
+        </option>
+
+        <option value="extremeFlood">
+            Extreme Flood
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <button onclick="runSimulation()">
+        Run Simulation
+    </button>
+
+    <p id="simulationResult">
+        Select a scenario and run the simulation.
+    </p>
+
+</section>
         <section class="anomaly-panel">
 
     <h2>⚠️ Anomaly Detection</h2>

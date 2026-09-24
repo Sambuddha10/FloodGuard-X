@@ -1,43 +1,31 @@
 function runSimulation() {
 
-    // Generate simulated environmental conditions
+    // Generate a simulated environmental scenario
 
-    let rainfall = Math.floor(Math.random() * 150);
-
-    let waterLevel = Number(
-        (Math.random() * 5).toFixed(2)
-    );
-
-    let soilMoisture = Math.floor(
-        Math.random() * 100
-    );
-
-    let temperature = Math.floor(
-        20 + Math.random() * 20
-    );
+    const scenario = generateScenario();
 
 
     // Display environmental values
 
     document.getElementById("rainfall").innerText =
-        rainfall + " mm";
+        scenario.rainfall + " mm";
 
     document.getElementById("waterLevel").innerText =
-        waterLevel + " m";
+        scenario.waterLevel + " m";
 
     document.getElementById("soilMoisture").innerText =
-        soilMoisture + "%";
+        scenario.soilMoisture + "%";
 
     document.getElementById("temperature").innerText =
-        temperature + "°C";
+        scenario.temperature + "°C";
 
 
-    // Send data to the Risk Engine
+    // Send scenario to the Risk Engine
 
-    let result = calculateRisk(
-        rainfall,
-        waterLevel,
-        soilMoisture
+    const result = calculateRisk(
+        scenario.rainfall,
+        scenario.waterLevel,
+        scenario.soilMoisture
     );
 
 
@@ -48,5 +36,4 @@ function runSimulation() {
 
     document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " + result.score;
-
 }

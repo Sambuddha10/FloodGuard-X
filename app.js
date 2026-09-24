@@ -1,12 +1,10 @@
 function runSimulation() {
 
     // Generate a simulated environmental scenario
-
     const scenario = generateScenario();
 
 
     // Display environmental values
-
     document.getElementById("rainfall").innerText =
         scenario.rainfall + " mm";
 
@@ -20,8 +18,7 @@ function runSimulation() {
         scenario.temperature + "°C";
 
 
-    // Send scenario to the Risk Engine
-
+    // Calculate flood risk
     const result = calculateRisk(
         scenario.rainfall,
         scenario.waterLevel,
@@ -29,11 +26,59 @@ function runSimulation() {
     );
 
 
-    // Display risk result
+    // Get page elements
+    const riskLevel = document.getElementById("riskLevel");
+    const riskMessage = document.getElementById("riskMessage");
+    const statusCard = document.querySelector(".status-card");
 
-    document.getElementById("riskLevel").innerText =
-        result.level;
 
+    // Display risk level
+    riskLevel.innerText = result.level;
+
+
+    // Remove previous risk styles
+    riskLevel.classList.remove(
+        "risk-low",
+        "risk-medium",
+        "risk-high"
+    );
+
+
+    // Change page based on risk
+    if (result.level === "LOW") {
+
+        riskLevel.classList.add("risk-low");
+
+        riskMessage.innerText =
+            "Current conditions indicate a low flood risk.";
+
+        statusCard.style.border = "4px solid #22c55e";
+
+    }
+
+    else if (result.level === "MEDIUM") {
+
+        riskLevel.classList.add("risk-medium");
+
+        riskMessage.innerText =
+            "Moderate flood risk detected. Monitoring is recommended.";
+
+        statusCard.style.border = "4px solid #f59e0b";
+
+    }
+
+    else if (result.level === "HIGH") {
+
+        riskLevel.classList.add("risk-high");
+
+        riskMessage.innerText =
+            "High flood risk detected. Immediate attention is recommended.";
+
+        statusCard.style.border = "4px solid #ef4444";
+    }
+
+
+    // Display simulation result
     document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " + result.score;
 }

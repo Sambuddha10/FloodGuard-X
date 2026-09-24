@@ -1,7 +1,11 @@
 function runSimulation() {
 
     // Generate a simulated environmental scenario
-    const scenario = generateScenario();
+    const selectedScenario =
+    document.getElementById("scenarioSelect").value;
+
+const scenario =
+    generateScenario(selectedScenario);
 
 
     // Display environmental values

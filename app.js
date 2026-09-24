@@ -4,13 +4,15 @@ function runSimulation() {
     const selectedScenario =
         document.getElementById("scenarioSelect").value;
 
-
     // Generate scenario
     const scenario =
         generateScenario(selectedScenario);
 
 
-    // Display environmental values
+    // =========================
+    // DISPLAY SENSOR VALUES
+    // =========================
+
     document.getElementById("rainfall").innerText =
         scenario.rainfall + " mm";
 
@@ -24,15 +26,16 @@ function runSimulation() {
         scenario.temperature + "°C";
 
 
-    // Calculate flood risk
+    // =========================
+    // FLOOD RISK CALCULATION
+    // =========================
+
     const result = calculateRisk(
         scenario.rainfall,
         scenario.waterLevel,
         scenario.soilMoisture
     );
 
-
-    // Get risk elements
     const riskLevel =
         document.getElementById("riskLevel");
 
@@ -43,11 +46,8 @@ function runSimulation() {
         document.querySelector(".status-card");
 
 
-    // Display risk level
     riskLevel.innerText = result.level;
 
-
-    // Remove old risk styles
     riskLevel.classList.remove(
         "risk-low",
         "risk-medium",
@@ -55,7 +55,6 @@ function runSimulation() {
     );
 
 
-    // Update risk appearance
     if (result.level === "LOW") {
 
         riskLevel.classList.add("risk-low");
@@ -78,7 +77,7 @@ function runSimulation() {
             "4px solid #f59e0b";
     }
 
-    else if (result.level === "HIGH") {
+    else {
 
         riskLevel.classList.add("risk-high");
 
@@ -90,7 +89,6 @@ function runSimulation() {
     }
 
 
-    // Display risk score
     document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " + result.score;
 
@@ -99,11 +97,68 @@ function runSimulation() {
     // ANOMALY DETECTION
     // =========================
 
-    const anomaly = detectAnomaly(
-        scenario.rainfall,
-        scenario.waterLevel,
-        scenario.soilMoisture
-    );
+    let anomalyScore = 0;
+    let anomalyMessages = [];
+
+
+    // Rainfall anomaly
+    if (scenario.rainfall >= 120) {
+
+        anomalyScore += 40;
+
+        anomalyMessages.push(
+            "Extremely high rainfall detected."
+        );
+    }
+
+    else if (scenario.rainfall >= 90) {
+
+        anomalyScore += 20;
+
+        anomalyMessages.push(
+            "Unusually high rainfall detected."
+        );
+    }
+
+
+    // Water level anomaly
+    if (scenario.waterLevel >= 4) {
+
+        anomalyScore += 40;
+
+        anomalyMessages.push(
+            "Critical water level detected."
+        );
+    }
+
+    else if (scenario.waterLevel >= 3) {
+
+        anomalyScore += 20;
+
+        anomalyMessages.push(
+            "Unusually high water level detected."
+        );
+    }
+
+
+    // Soil moisture anomaly
+    if (scenario.soilMoisture >= 90) {
+
+        anomalyScore += 20;
+
+        anomalyMessages.push(
+            "Extremely high soil moisture detected."
+        );
+    }
+
+    else if (scenario.soilMoisture >= 80) {
+
+        anomalyScore += 10;
+
+        anomalyMessages.push(
+            "High soil moisture detected."
+        );
+    }
 
 
     // Get anomaly elements
@@ -114,25 +169,22 @@ function runSimulation() {
         document.getElementById("anomalyMessage");
 
 
-    // Remove previous anomaly styles
-    anomalyStatus.classList.remove(
-        "anomaly-safe",
-        "anomaly-warning"
-    );
-
-
-    // Display anomaly result
-    if (anomaly.isAnomaly) {
+    // Display anomaly
+    if (anomalyScore >= 40) {
 
         anomalyStatus.innerText =
             "ANOMALY DETECTED";
+
+        anomalyStatus.classList.remove(
+            "anomaly-safe"
+        );
 
         anomalyStatus.classList.add(
             "anomaly-warning"
         );
 
         anomalyMessage.innerText =
-            anomaly.messages.join(" ");
+            anomalyMessages.join(" ");
 
     }
 
@@ -140,6 +192,10 @@ function runSimulation() {
 
         anomalyStatus.innerText =
             "NO ANOMALY";
+
+        anomalyStatus.classList.remove(
+            "anomaly-warning"
+        );
 
         anomalyStatus.classList.add(
             "anomaly-safe"

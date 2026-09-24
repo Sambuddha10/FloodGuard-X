@@ -122,3 +122,36 @@ footer {
 .status-card {
     transition: 0.3s ease;
 }
+/* Anomaly Detection */
+
+.anomaly-panel {
+    background: white;
+    margin-top: 25px;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
+}
+
+.anomaly-panel h2 {
+    margin-top: 0;
+}
+
+#anomalyStatus {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin: 15px;
+}
+
+.anomaly-safe {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.anomaly-warning {
+    background: #fee2e2;
+    color: #991b1b;
+}

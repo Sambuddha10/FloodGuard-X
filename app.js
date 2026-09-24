@@ -82,3 +82,49 @@ function runSimulation() {
     document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " + result.score;
 }
+    // Detect environmental anomalies
+
+    const anomaly = detectAnomaly(
+        scenario.rainfall,
+        scenario.waterLevel,
+        scenario.soilMoisture
+    );
+
+
+    const anomalyStatus =
+        document.getElementById("anomalyStatus");
+
+    const anomalyMessage =
+        document.getElementById("anomalyMessage");
+
+
+    // Remove previous anomaly styles
+
+    anomalyStatus.classList.remove(
+        "anomaly-safe",
+        "anomaly-warning"
+    );
+
+
+    // Display anomaly result
+
+    if (anomaly.isAnomaly) {
+
+        anomalyStatus.innerText = "ANOMALY DETECTED";
+
+        anomalyStatus.classList.add("anomaly-warning");
+
+        anomalyMessage.innerText =
+            anomaly.messages.join(" ");
+
+    }
+
+    else {
+
+        anomalyStatus.innerText = "NO ANOMALY";
+
+        anomalyStatus.classList.add("anomaly-safe");
+
+        anomalyMessage.innerText =
+            "No unusual environmental conditions detected.";
+    }

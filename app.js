@@ -558,7 +558,7 @@ historyItem.innerHTML = `
     historyElement.appendChild(
         historyItem
     );
-  update RiskChart();
+  
 
 
     // --------------------------------------------------

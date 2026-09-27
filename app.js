@@ -309,5 +309,12 @@ historyElement.appendChild(historyItem);
     "Risk: " + result.level + "<br>" +
     "Score: " + result.score +
     "</div>";
+    document.getElementById("riskHistory").innerHTML =
+    "<div class='history-item'>" +
+    "<strong>TEST: Simulation Recorded</strong><br>" +
+    "Scenario: " + selectedScenario + "<br>" +
+    "Risk: " + result.level + "<br>" +
+    "Score: " + result.score +
+    "</div>";
 
 }

@@ -91,6 +91,10 @@ function runSimulation() {
 
     document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " + result.score;
+    addRiskHistory(
+    result.score,
+    result.level
+);
 
 
     // =========================

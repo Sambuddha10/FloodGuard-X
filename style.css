@@ -5,6 +5,9 @@ body {
     color: #1f2937;
 }
 
+
+/* HEADER */
+
 header {
     background: #0f172a;
     color: white;
@@ -22,11 +25,17 @@ header p {
     font-size: 16px;
 }
 
+
+/* MAIN */
+
 main {
     max-width: 1100px;
     margin: 30px auto;
     padding: 20px;
 }
+
+
+/* CURRENT RISK */
 
 .status-card {
     background: white;
@@ -34,6 +43,7 @@ main {
     border-radius: 15px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
 }
 
 .status-card h2 {
@@ -44,7 +54,31 @@ main {
     font-size: 42px;
     font-weight: bold;
     margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s ease;
 }
+
+
+/* RISK COLORS */
+
+.risk-low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.risk-medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.risk-high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* ENVIRONMENTAL CARDS */
 
 .dashboard {
     display: grid;
@@ -70,6 +104,9 @@ main {
     font-weight: bold;
 }
 
+
+/* SIMULATOR */
+
 .simulation {
     background: white;
     margin-top: 25px;
@@ -77,6 +114,13 @@ main {
     border-radius: 15px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
 }
 
 button {
@@ -93,36 +137,8 @@ button:hover {
     background: #1d4ed8;
 }
 
-footer {
-    text-align: center;
-    padding: 25px;
-    margin-top: 30px;
-}
-/* Risk level colors */
 
-#riskLevel {
-    transition: 0.3s ease;
-}
-
-.risk-low {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.risk-medium {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.risk-high {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.status-card {
-    transition: 0.3s ease;
-}
-/* Anomaly Detection */
+/* ANOMALY PANEL */
 
 .anomaly-panel {
     background: white;
@@ -131,7 +147,6 @@ footer {
     border-radius: 15px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: 0.3s ease;
 }
 
 .anomaly-panel h2 {
@@ -155,6 +170,10 @@ footer {
     background: #fee2e2;
     color: #991b1b;
 }
+
+
+/* RISK HISTORY */
+
 .history-panel {
     background: white;
     margin-top: 25px;
@@ -168,7 +187,46 @@ footer {
     text-align: center;
 }
 
-#riskHistory div {
-    padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
+#riskHistory {
+    margin-top: 20px;
+}
+
+.history-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border-left: 4px solid #2563eb;
+}
+
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding: 10px;
+    }
+
 }

@@ -14,28 +14,38 @@ function addRiskHistory(
 
     riskHistory.push({
 
-        scenario: scenarioName,
+        scenario:
+            scenarioName,
 
-        rainfall: rainfall,
+        rainfall:
+            rainfall,
 
-        waterLevel: waterLevel,
+        waterLevel:
+            waterLevel,
 
-        soilMoisture: soilMoisture,
+        soilMoisture:
+            soilMoisture,
 
-        temperature: temperature,
+        temperature:
+            temperature,
 
-        score: score,
+        score:
+            score,
 
-        level: level,
+        level:
+            level,
 
-        anomaly: anomaly
+        anomaly:
+            anomaly
     });
 
 
-    // Keep the latest 10 simulations
+    // Keep latest 10 simulations
 
     if (riskHistory.length > 10) {
+
         riskHistory.shift();
+
     }
 
 
@@ -46,40 +56,70 @@ function addRiskHistory(
 function updateRiskHistory() {
 
     const historyElement =
-        document.getElementById("riskHistory");
+        document.getElementById(
+            "riskHistory"
+        );
 
 
     if (!historyElement) {
+
         return;
+
     }
 
 
     historyElement.innerHTML = "";
 
 
-    riskHistory.forEach((item, index) => {
+    riskHistory.forEach(
+        (item, index) => {
 
-        const row =
-            document.createElement("div");
-
-
-        row.innerText =
-            "Simulation " +
-            (index + 1) +
-            " | " +
-            item.scenario +
-            " | Rain: " +
-            item.rainfall +
-            " mm | Water: " +
-            item.waterLevel +
-            " m | Risk: " +
-            item.level +
-            " | Score: " +
-            item.score +
-            " | Anomaly: " +
-            item.anomaly;
+            const row =
+                document.createElement(
+                    "div"
+                );
 
 
-        historyElement.appendChild(row);
-    });
+            row.className =
+                "history-item";
+
+
+            row.innerText =
+                "Simulation " +
+                (index + 1) +
+
+                " | Scenario: " +
+                item.scenario +
+
+                " | Rain: " +
+                item.rainfall +
+                " mm" +
+
+                " | Water: " +
+                item.waterLevel +
+                " m" +
+
+                " | Soil: " +
+                item.soilMoisture +
+                "%" +
+
+                " | Temperature: " +
+                item.temperature +
+                "°C" +
+
+                " | Risk: " +
+                item.level +
+
+                " | Score: " +
+                item.score +
+
+                " | Anomaly: " +
+                item.anomaly;
+
+
+            historyElement.appendChild(
+                row
+            );
+        }
+    );
 }

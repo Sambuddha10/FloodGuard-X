@@ -155,3 +155,20 @@ footer {
     background: #fee2e2;
     color: #991b1b;
 }
+.history-panel {
+    background: white;
+    margin-top: 25px;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.history-panel h2 {
+    text-align: center;
+}
+
+#riskHistory div {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}

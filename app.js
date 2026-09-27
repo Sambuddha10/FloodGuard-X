@@ -92,8 +92,14 @@ function runSimulation() {
     document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " + result.score;
     addRiskHistory(
+    selectedScenario,
+    scenario.rainfall,
+    scenario.waterLevel,
+    scenario.soilMoisture,
+    scenario.temperature,
     result.score,
-    result.level
+    result.level,
+    anomalyScore >= 40 ? "YES" : "NO"
 );
 
 

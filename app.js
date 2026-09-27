@@ -1,14 +1,14 @@
 function runSimulation() {
 
-
     // ========================================
     // GET SELECTED SCENARIO
     // ========================================
 
+    const scenarioSelect =
+        document.getElementById("scenarioSelect");
+
     const selectedScenario =
-        document.getElementById(
-            "scenarioSelect"
-        ).value;
+        scenarioSelect.value;
 
 
     // ========================================
@@ -16,52 +16,35 @@ function runSimulation() {
     // ========================================
 
     const scenario =
-        generateScenario(
-            selectedScenario
-        );
+        generateScenario(selectedScenario);
 
 
     // ========================================
     // DISPLAY ENVIRONMENTAL VALUES
     // ========================================
 
-    document.getElementById(
-        "rainfall"
-    ).innerText =
+    document.getElementById("rainfall").innerText =
         scenario.rainfall + " mm";
 
-
-    document.getElementById(
-        "waterLevel"
-    ).innerText =
+    document.getElementById("waterLevel").innerText =
         scenario.waterLevel + " m";
 
-
-    document.getElementById(
-        "soilMoisture"
-    ).innerText =
+    document.getElementById("soilMoisture").innerText =
         scenario.soilMoisture + "%";
 
-
-    document.getElementById(
-        "temperature"
-    ).innerText =
+    document.getElementById("temperature").innerText =
         scenario.temperature + "°C";
 
 
     // ========================================
-    // RISK ENGINE
+    // CALCULATE FLOOD RISK
     // ========================================
 
     const result =
         calculateRisk(
-
             scenario.rainfall,
-
             scenario.waterLevel,
-
             scenario.soilMoisture
-
         );
 
 
@@ -70,106 +53,67 @@ function runSimulation() {
     // ========================================
 
     const riskLevel =
-        document.getElementById(
-            "riskLevel"
-        );
-
+        document.getElementById("riskLevel");
 
     const riskMessage =
-        document.getElementById(
-            "riskMessage"
-        );
-
+        document.getElementById("riskMessage");
 
     const statusCard =
-        document.querySelector(
-            ".status-card"
-        );
+        document.querySelector(".status-card");
 
 
     // ========================================
-    // UPDATE RISK LEVEL
+    // REMOVE OLD RISK STYLES
+    // ========================================
+
+    riskLevel.classList.remove(
+        "risk-low",
+        "risk-medium",
+        "risk-high"
+    );
+
+
+    // ========================================
+    // UPDATE RISK
     // ========================================
 
     riskLevel.innerText =
         result.level;
 
 
-    riskLevel.classList.remove(
+    if (result.level === "LOW") {
 
-        "risk-low",
-
-        "risk-medium",
-
-        "risk-high"
-
-    );
-
-
-    // ========================================
-    // LOW
-    // ========================================
-
-    if (
-        result.level === "LOW"
-    ) {
-
-        riskLevel.classList.add(
-            "risk-low"
-        );
-
+        riskLevel.classList.add("risk-low");
 
         riskMessage.innerText =
             "Current conditions indicate a low flood risk.";
 
-
         statusCard.style.border =
             "4px solid #22c55e";
-
     }
 
 
-    // ========================================
-    // MEDIUM
-    // ========================================
+    else if (result.level === "MEDIUM") {
 
-    else if (
-        result.level === "MEDIUM"
-    ) {
-
-        riskLevel.classList.add(
-            "risk-medium"
-        );
-
+        riskLevel.classList.add("risk-medium");
 
         riskMessage.innerText =
             "Moderate flood risk detected. Monitoring is recommended.";
 
-
         statusCard.style.border =
             "4px solid #f59e0b";
-
     }
 
 
-    // ========================================
-    // HIGH
-    // ========================================
-
     else {
 
-        riskLevel.classList.add(
-            "risk-high"
-        );
-
+        riskLevel.classList.add("risk-high");
 
         riskMessage.innerText =
             "High flood risk detected. Immediate attention is recommended.";
 
-
         statusCard.style.border =
             "4px solid #ef4444";
-
     }
 
 
@@ -177,10 +121,7 @@ function runSimulation() {
     // SIMULATION RESULT
     // ========================================
 
-    document.getElementById(
-        "simulationResult"
-    ).innerText =
-
+    document.getElementById("simulationResult").innerText =
         "Simulation completed. Risk score: " +
         result.score;
 
@@ -191,13 +132,9 @@ function runSimulation() {
 
     const anomaly =
         detectAnomaly(
-
             scenario.rainfall,
-
             scenario.waterLevel,
-
             scenario.soilMoisture
-
         );
 
 
@@ -206,115 +143,111 @@ function runSimulation() {
     // ========================================
 
     const anomalyStatus =
-        document.getElementById(
-            "anomalyStatus"
-        );
-
+        document.getElementById("anomalyStatus");
 
     const anomalyMessage =
-        document.getElementById(
-            "anomalyMessage"
-        );
+        document.getElementById("anomalyMessage");
 
 
     // ========================================
-    // REMOVE OLD ANOMALY STYLE
+    // REMOVE OLD ANOMALY STYLES
     // ========================================
 
     anomalyStatus.classList.remove(
-
         "anomaly-safe",
-
         "anomaly-warning"
-
     );
 
 
     // ========================================
-    // ANOMALY DETECTED
+    // UPDATE ANOMALY
     // ========================================
 
-    if (
-        anomaly.isAnomaly
-    ) {
+    if (anomaly.isAnomaly) {
 
         anomalyStatus.innerText =
             "ANOMALY DETECTED";
-
 
         anomalyStatus.classList.add(
             "anomaly-warning"
         );
 
-
         anomalyMessage.innerText =
-
-            anomaly.messages.join(
-                " "
-            );
-
+            anomaly.messages.join(" ");
     }
-
-
-    // ========================================
-    // NO ANOMALY
-    // ========================================
 
     else {
 
         anomalyStatus.innerText =
             "NO ANOMALY";
 
-
         anomalyStatus.classList.add(
             "anomaly-safe"
         );
 
-
         anomalyMessage.innerText =
             "No unusual environmental conditions detected.";
-
     }
 
 
     // ========================================
-    // SAVE TO RISK HISTORY
+    // RISK HISTORY
     // ========================================
 
-   const historyElement =
-    document.getElementById("riskHistory");
+    const historyElement =
+        document.getElementById("riskHistory");
 
-const historyItem =
-    document.createElement("div");
 
-historyItem.className = "history-item";
+    // Clear "No simulations recorded yet."
+    historyElement.innerHTML = "";
 
-historyItem.innerHTML = `
-    <strong>Simulation</strong><br>
-    Scenario: ${selectedScenario}<br>
-    Rainfall: ${scenario.rainfall} mm<br>
-    Water Level: ${scenario.waterLevel} m<br>
-    Soil Moisture: ${scenario.soilMoisture}%<br>
-    Temperature: ${scenario.temperature}°C<br>
-    Risk: ${result.level}<br>
-    Risk Score: ${result.score}<br>
-    Anomaly: ${anomaly.isAnomaly ? "YES" : "NO"}
-`;
 
-historyElement.appendChild(historyItem);
-    document.getElementById("riskHistory").innerHTML =
-    "<div class='history-item'>" +
-    "<strong>TEST: Simulation Recorded</strong><br>" +
-    "Scenario: " + selectedScenario + "<br>" +
-    "Risk: " + result.level + "<br>" +
-    "Score: " + result.score +
-    "</div>";
-    document.getElementById("riskHistory").innerHTML =
-    "<div class='history-item'>" +
-    "<strong>TEST: Simulation Recorded</strong><br>" +
-    "Scenario: " + selectedScenario + "<br>" +
-    "Risk: " + result.level + "<br>" +
-    "Score: " + result.score +
-    "</div>";
+    // Create history record
+    const historyItem =
+        document.createElement("div");
+
+
+    historyItem.className =
+        "history-item";
+
+
+    historyItem.innerHTML =
+
+        "<strong>Simulation Recorded</strong><br>" +
+
+        "Scenario: " +
+        selectedScenario +
+        "<br>" +
+
+        "Rainfall: " +
+        scenario.rainfall +
+        " mm<br>" +
+
+        "Water Level: " +
+        scenario.waterLevel +
+        " m<br>" +
+
+        "Soil Moisture: " +
+        scenario.soilMoisture +
+        "%<br>" +
+
+        "Temperature: " +
+        scenario.temperature +
+        "°C<br>" +
+
+        "Risk: " +
+        result.level +
+        "<br>" +
+
+        "Risk Score: " +
+        result.score +
+        "<br>" +
+
+        "Anomaly: " +
+        (anomaly.isAnomaly ? "YES" : "NO");
+
+
+    // Add record to page
+    historyElement.appendChild(historyItem);
 
 }

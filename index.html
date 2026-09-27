@@ -9,13 +9,6 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>FloodGuard-X</title>
-    #riskChart {
-    width: 100%;
-    max-width: 800px;
-    height: 300px;
-    display: block;
-    margin: auto;
-}
 
     <style>
 
@@ -98,6 +91,8 @@
         select {
             padding: 12px;
             font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
         }
 
         button {
@@ -132,6 +127,21 @@
             color: #991b1b;
         }
 
+        #riskChart {
+            width: 100%;
+            max-width: 800px;
+            height: 300px;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+        }
+
+        #chartMessage {
+            color: #64748b;
+        }
+
         .history-item {
             text-align: left;
             background: #f8fafc;
@@ -139,6 +149,11 @@
             margin-top: 10px;
             border-left: 4px solid #2563eb;
             border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
         }
 
         @media (max-width: 800px) {
@@ -155,26 +170,11 @@
                 grid-template-columns: 1fr;
             }
 
+            main {
+                padding: 10px;
+            }
+
         }
-        #riskChartContainer {
-    width: 100%;
-    text-align: center;
-}
-
-#riskChart {
-    display: block;
-    width: 100%;
-    max-width: 800px;
-    height: 300px;
-    margin: 20px auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background: #ffffff;
-}
-
-#chartMessage {
-    color: #64748b;
-}
 
     </style>
 
@@ -198,7 +198,7 @@
 <main>
 
 
-    <!-- RISK -->
+    <!-- CURRENT RISK -->
 
     <section class="box">
 
@@ -215,7 +215,7 @@
     </section>
 
 
-    <!-- ENVIRONMENT -->
+    <!-- ENVIRONMENTAL VALUES -->
 
     <section class="values">
 
@@ -316,96 +316,106 @@
     </section>
 
 
-    <!-- ANOMALY -->
+    <!-- ANOMALY DETECTION -->
 
     <section class="box">
 
         <h2>⚠️ Anomaly Detection</h2>
 
-        <div id="anomalyStatus"
-             class="safe">
-
+        <div id="anomalyStatus" class="safe">
             NO ANOMALY
-
         </div>
 
-
         <p id="anomalyMessage">
-
             No unusual environmental conditions detected.
-
         </p>
 
     </section>
 
 
-  <!-- RISK TREND -->
+    <!-- RISK TREND -->
 
-<section class="box">
+    <section class="box">
 
-    <h2>📈 Risk Trend</h2>
+        <h2>📈 Risk Trend</h2>
 
-    <canvas
-        id="riskChart"
-        width="800"
-        height="300">
-    </canvas>
+        <canvas
+            id="riskChart"
+            width="800"
+            height="300">
+        </canvas>
 
-      <p id="chartMessage">
+        <p id="chartMessage">
             Run simulations to generate the risk trend.
         </p>
 
-    </div>
-    
-
-</section>
+    </section>
 
 
-<!-- HISTORY -->
+    <!-- RISK HISTORY -->
 
-<section class="box">
+    <section class="box">
 
-    <h2>📊 Risk History</h2>
+        <h2>📊 Risk History</h2>
 
-    <div id="riskHistory"></div>
+        <div id="riskHistory"></div>
 
-</section>
+    </section>
 
 
 </main>
+
+
+<footer>
+
+    <p>
+        FloodGuard-X | Disaster Management Research Project
+    </p>
+
+</footer>
 
 
 <script>
 
 
 // =====================================================
-// FLOODGUARD-X SINGLE FILE TEST
+// RISK SCORES FOR GRAPH
 // =====================================================
 
-
-const runButton =
-    document.getElementById("runButton");
-
-
-runButton.addEventListener(
-    "click",
-    runSimulation
-);
+let riskScores = [];
 
 
 // =====================================================
-// SCENARIO
+// BUTTON
+// =====================================================
+
+document
+    .getElementById("runButton")
+    .addEventListener(
+        "click",
+        runSimulation
+    );
+
+
+// =====================================================
+// SCENARIO GENERATOR
 // =====================================================
 
 function generateScenario(type) {
 
+
     if (type === "normal") {
 
         return {
+
             rainfall: 20,
+
             waterLevel: 1.2,
+
             soilMoisture: 40,
+
             temperature: 28
+
         };
 
     }
@@ -414,10 +424,15 @@ function generateScenario(type) {
     if (type === "heavyRain") {
 
         return {
+
             rainfall: 110,
+
             waterLevel: 2.2,
+
             soilMoisture: 75,
+
             temperature: 25
+
         };
 
     }
@@ -426,10 +441,15 @@ function generateScenario(type) {
     if (type === "risingWater") {
 
         return {
+
             rainfall: 70,
+
             waterLevel: 3.5,
+
             soilMoisture: 85,
+
             temperature: 26
+
         };
 
     }
@@ -438,31 +458,45 @@ function generateScenario(type) {
     if (type === "extremeFlood") {
 
         return {
+
             rainfall: 140,
+
             waterLevel: 4.5,
+
             soilMoisture: 95,
+
             temperature: 24
+
         };
 
     }
 
 
+    // RANDOM
+
     return {
 
         rainfall:
-            Math.floor(Math.random() * 150),
+            Math.floor(
+                Math.random() * 150
+            ),
 
         waterLevel:
             Number(
-                (Math.random() * 5).toFixed(2)
+                (
+                    Math.random() * 5
+                ).toFixed(2)
             ),
 
         soilMoisture:
-            Math.floor(Math.random() * 100),
+            Math.floor(
+                Math.random() * 100
+            ),
 
         temperature:
             Math.floor(
-                20 + Math.random() * 20
+                20 +
+                Math.random() * 20
             )
 
     };
@@ -479,6 +513,7 @@ function calculateRisk(
     waterLevel,
     soilMoisture
 ) {
+
 
     let score = 0;
 
@@ -541,6 +576,7 @@ function calculateRisk(
     return {
 
         score: score,
+
         level: level
 
     };
@@ -549,7 +585,7 @@ function calculateRisk(
 
 
 // =====================================================
-// ANOMALY
+// ANOMALY DETECTION
 // =====================================================
 
 function detectAnomaly(
@@ -557,6 +593,7 @@ function detectAnomaly(
     waterLevel,
     soilMoisture
 ) {
+
 
     let score = 0;
 
@@ -618,9 +655,11 @@ function detectAnomaly(
 
     return {
 
-        isAnomaly: score >= 40,
+        isAnomaly:
+            score >= 40,
 
-        messages: messages
+        messages:
+            messages
 
     };
 
@@ -628,57 +667,73 @@ function detectAnomaly(
 
 
 // =====================================================
-// MAIN
+// MAIN SIMULATION
 // =====================================================
 
 function runSimulation() {
 
 
-    const selected =
-        document.getElementById(
-            "scenarioSelect"
-        ).value;
+    // GET SCENARIO
 
+    const selected =
+        document
+            .getElementById(
+                "scenarioSelect"
+            )
+            .value;
+
+
+    // GENERATE
 
     const scenario =
         generateScenario(selected);
 
 
-    // VALUES
+    // UPDATE VALUES
 
-    document.getElementById(
-        "rainfall"
-    ).innerText =
-        scenario.rainfall + " mm";
-
-
-    document.getElementById(
-        "waterLevel"
-    ).innerText =
-        scenario.waterLevel + " m";
+    document
+        .getElementById("rainfall")
+        .innerText =
+            scenario.rainfall +
+            " mm";
 
 
-    document.getElementById(
-        "soilMoisture"
-    ).innerText =
-        scenario.soilMoisture + "%";
+    document
+        .getElementById("waterLevel")
+        .innerText =
+            scenario.waterLevel +
+            " m";
 
 
-    document.getElementById(
-        "temperature"
-    ).innerText =
-        scenario.temperature + "°C";
+    document
+        .getElementById("soilMoisture")
+        .innerText =
+            scenario.soilMoisture +
+            "%";
 
 
-    // RISK
+    document
+        .getElementById("temperature")
+        .innerText =
+            scenario.temperature +
+            "°C";
+
+
+    // CALCULATE RISK
 
     const risk =
         calculateRisk(
+
             scenario.rainfall,
+
             scenario.waterLevel,
+
             scenario.soilMoisture
+
         );
 
+
+    // UPDATE RISK
 
     const riskElement =
         document.getElementById(
@@ -691,55 +746,67 @@ function runSimulation() {
 
     if (risk.level === "HIGH") {
 
-        riskElement.classList.add("high");
-
-        riskElement.innerText =
-            "HIGH";
+        riskElement.classList.add(
+            "high"
+        );
 
     }
 
     else if (risk.level === "MEDIUM") {
 
-        riskElement.classList.add("medium");
-
-        riskElement.innerText =
-            "MEDIUM";
+        riskElement.classList.add(
+            "medium"
+        );
 
     }
 
     else {
 
-        riskElement.classList.add("low");
-
-        riskElement.innerText =
-            "LOW";
+        riskElement.classList.add(
+            "low"
+        );
 
     }
 
 
-    document.getElementById(
-        "riskMessage"
-    ).innerText =
-
-        "Flood risk level: " +
+    riskElement.innerText =
         risk.level;
 
 
-    document.getElementById(
-        "simulationResult"
-    ).innerText =
+    document
+        .getElementById("riskMessage")
+        .innerText =
 
-        "Simulation completed. Risk score: " +
-        risk.score;
+            "Flood risk level: " +
+            risk.level;
 
 
+    // RESULT
+
+    document
+        .getElementById(
+            "simulationResult"
+        )
+        .innerText =
+
+            "Simulation completed. " +
+            "Risk score: " +
+            risk.score;
+
+
+    // =================================================
     // ANOMALY
+    // =================================================
 
     const anomaly =
         detectAnomaly(
+
             scenario.rainfall,
+
             scenario.waterLevel,
+
             scenario.soilMoisture
+
         );
 
 
@@ -784,7 +851,9 @@ function runSimulation() {
     }
 
 
-    // HISTORY
+    // =================================================
+    // RISK HISTORY
+    // =================================================
 
     const history =
         document.getElementById(
@@ -802,212 +871,355 @@ function runSimulation() {
         "history-item";
 
 
-    item.innerHTML =
+    item.innerHTML = `
 
-        "<strong>Simulation Recorded</strong><br>" +
+        <strong>Simulation Recorded</strong>
 
-        "Time: " +
-        new Date().toLocaleString() +
-        "<br>" +
+        <br><br>
 
-        "Scenario: " +
-        selected +
-        "<br>" +
+        <strong>Time:</strong>
+        ${new Date().toLocaleString()}
 
-        "Rainfall: " +
-        scenario.rainfall +
-        " mm<br>" +
+        <br>
 
-        "Water Level: " +
-        scenario.waterLevel +
-        " m<br>" +
+        <strong>Scenario:</strong>
+        ${selected}
 
-        "Soil Moisture: " +
-        scenario.soilMoisture +
-        "%<br>" +
+        <br>
 
-        "Temperature: " +
-        scenario.temperature +
-        "°C<br>" +
+        <strong>Rainfall:</strong>
+        ${scenario.rainfall} mm
 
-        "Risk: " +
-        risk.level +
-        "<br>" +
+        <br>
 
-        "Risk Score: " +
-        risk.score +
-        "<br>" +
+        <strong>Water Level:</strong>
+        ${scenario.waterLevel} m
 
-        "Anomaly: " +
-        (anomaly.isAnomaly ? "YES" : "NO");
+        <br>
+
+        <strong>Soil Moisture:</strong>
+        ${scenario.soilMoisture}%
+
+        <br>
+
+        <strong>Temperature:</strong>
+        ${scenario.temperature}°C
+
+        <br>
+
+        <strong>Risk:</strong>
+        ${risk.level}
+
+        <br>
+
+        <strong>Risk Score:</strong>
+        ${risk.score}
+
+        <br>
+
+        <strong>Anomaly:</strong>
+        ${anomaly.isAnomaly ? "YES" : "NO"}
+
+    `;
 
 
     history.appendChild(item);
-     updateRiskChart();
+
+
+    // =================================================
+    // ADD SCORE TO GRAPH
+    // =================================================
+
+    riskScores.push(risk.score);
+
+
+    updateRiskChart();
 
 }
+
+
+// =====================================================
+// RISK TREND GRAPH
+// =====================================================
+
 function updateRiskChart() {
 
+
     const canvas =
-        document.getElementById("riskChart");
+        document.getElementById(
+            "riskChart"
+        );
+
 
     const message =
-        document.getElementById("chartMessage");
+        document.getElementById(
+            "chartMessage"
+        );
+
 
     if (!canvas) {
+
         return;
+
     }
 
-    const historyItems =
-        document.querySelectorAll(".history-item");
-
-    if (historyItems.length === 0) {
-        return;
-    }
-
-    const scores = [];
-
-    historyItems.forEach(function(item) {
-
-        const text = item.innerText;
-
-        const match =
-            text.match(/Risk Score:\s*(\d+)/);
-
-        if (match) {
-            scores.push(Number(match[1]));
-        }
-
-    });
-
-    if (scores.length === 0) {
-        return;
-    }
-
-    if (message) {
-        message.style.display = "none";
-    }
 
     const ctx =
         canvas.getContext("2d");
 
+
     ctx.clearRect(
+
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
+
     );
 
-    const width = canvas.width;
-    const height = canvas.height;
 
-    const padding = 40;
+    if (
+        riskScores.length === 0
+    ) {
+
+        return;
+
+    }
 
 
+    // HIDE MESSAGE
+
+    if (message) {
+
+        message.style.display =
+            "none";
+
+    }
+
+
+    const width =
+        canvas.width;
+
+
+    const height =
+        canvas.height;
+
+
+    const padding = 50;
+
+
+    // =================================================
     // AXES
+    // =================================================
 
     ctx.beginPath();
+
 
     ctx.moveTo(
         padding,
         padding
     );
 
+
     ctx.lineTo(
         padding,
         height - padding
     );
+
 
     ctx.lineTo(
         width - padding,
         height - padding
     );
 
+
     ctx.stroke();
 
 
-    // LINE
+    // =================================================
+    // Y AXIS LABELS
+    // =================================================
+
+    ctx.font =
+        "14px Arial";
+
+
+    ctx.fillText(
+        "100",
+        10,
+        padding + 5
+    );
+
+
+    ctx.fillText(
+        "50",
+        20,
+        height / 2
+    );
+
+
+    ctx.fillText(
+        "0",
+        25,
+        height - padding
+    );
+
+
+    // =================================================
+    // GRAPH LINE
+    // =================================================
 
     ctx.beginPath();
 
-    scores.forEach(function(score, index) {
 
-        const x =
-            padding +
-            (
-                index /
-                Math.max(scores.length - 1, 1)
-            ) *
-            (
-                width - padding * 2
-            );
-
-        const y =
-            height -
-            padding -
-            (
-                score / 100
-            ) *
-            (
-                height - padding * 2
-            );
+    riskScores.forEach(
+        function(score, index) {
 
 
-        if (index === 0) {
+            const x =
 
-            ctx.moveTo(x, y);
+                padding +
 
-        } else {
+                (
+                    index /
+                    Math.max(
+                        riskScores.length - 1,
+                        1
+                    )
+                ) *
 
-            ctx.lineTo(x, y);
+                (
+                    width -
+                    padding * 2
+                );
+
+
+            const y =
+
+                height -
+                padding -
+
+                (
+                    score / 100
+                ) *
+
+                (
+                    height -
+                    padding * 2
+                );
+
+
+            if (index === 0) {
+
+                ctx.moveTo(
+                    x,
+                    y
+                );
+
+            }
+
+            else {
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
 
         }
+    );
 
-    });
 
     ctx.stroke();
 
 
+    // =================================================
     // POINTS
+    // =================================================
 
-    scores.forEach(function(score, index) {
+    riskScores.forEach(
+        function(score, index) {
 
-        const x =
-            padding +
-            (
-                index /
-                Math.max(scores.length - 1, 1)
-            ) *
-            (
-                width - padding * 2
+
+            const x =
+
+                padding +
+
+                (
+                    index /
+                    Math.max(
+                        riskScores.length - 1,
+                        1
+                    )
+                ) *
+
+                (
+                    width -
+                    padding * 2
+                );
+
+
+            const y =
+
+                height -
+                padding -
+
+                (
+                    score / 100
+                ) *
+
+                (
+                    height -
+                    padding * 2
+                );
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+
+                x,
+
+                y,
+
+                6,
+
+                0,
+
+                Math.PI * 2
+
             );
 
-        const y =
-            height -
-            padding -
-            (
-                score / 100
-            ) *
-            (
-                height - padding * 2
+
+            ctx.fill();
+
+
+            // SCORE LABEL
+
+            ctx.font =
+                "12px Arial";
+
+
+            ctx.fillText(
+
+                score,
+
+                x - 8,
+
+                y - 10
+
             );
 
+        }
+    );
 
-        ctx.beginPath();
+}
 
-        ctx.arc(
-            x,
-            y,
-            5,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-    });
-
-}    
 
 </script>
 

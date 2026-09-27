@@ -281,26 +281,26 @@ function runSimulation() {
     // SAVE TO RISK HISTORY
     // ========================================
 
-    addRiskHistory(
+   const historyElement =
+    document.getElementById("riskHistory");
 
-        selectedScenario,
+const historyItem =
+    document.createElement("div");
 
-        scenario.rainfall,
+historyItem.className = "history-item";
 
-        scenario.waterLevel,
+historyItem.innerHTML = `
+    <strong>Simulation</strong><br>
+    Scenario: ${selectedScenario}<br>
+    Rainfall: ${scenario.rainfall} mm<br>
+    Water Level: ${scenario.waterLevel} m<br>
+    Soil Moisture: ${scenario.soilMoisture}%<br>
+    Temperature: ${scenario.temperature}°C<br>
+    Risk: ${result.level}<br>
+    Risk Score: ${result.score}<br>
+    Anomaly: ${anomaly.isAnomaly ? "YES" : "NO"}
+`;
 
-        scenario.soilMoisture,
-
-        scenario.temperature,
-
-        result.score,
-
-        result.level,
-
-        anomaly.isAnomaly
-            ? "YES"
-            : "NO"
-
-    );
+historyElement.appendChild(historyItem);
 
 }

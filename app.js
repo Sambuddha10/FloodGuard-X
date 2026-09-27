@@ -558,6 +558,7 @@ historyItem.innerHTML = `
     historyElement.appendChild(
         historyItem
     );
+  update RiskChart();
 
 
     // --------------------------------------------------
@@ -566,6 +567,202 @@ historyItem.innerHTML = `
 
     console.log(
         "FloodGuard-X simulation recorded successfully."
+    );
+
+}
+function updateRiskChart() {
+
+    const canvas =
+        document.getElementById("riskChart");
+
+    if (!canvas) {
+        return;
+    }
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const historyItems =
+        document.querySelectorAll(
+            ".history-item"
+        );
+
+    if (historyItems.length === 0) {
+        return;
+    }
+
+    const scores = [];
+
+    historyItems.forEach(item => {
+
+        const text =
+            item.innerText;
+
+        const match =
+            text.match(
+                /Risk Score:\s*(\d+)/
+            );
+
+        if (match) {
+
+            scores.push(
+                Number(match[1])
+            );
+
+        }
+
+    });
+
+
+    if (scores.length === 0) {
+        return;
+    }
+
+
+    const width =
+        canvas.width;
+
+    const height =
+        canvas.height;
+
+
+    const padding = 40;
+
+
+    // AXIS
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padding,
+        padding
+    );
+
+    ctx.lineTo(
+        padding,
+        height - padding
+    );
+
+    ctx.lineTo(
+        width - padding,
+        height - padding
+    );
+
+    ctx.stroke();
+
+
+    // LINE
+
+    ctx.beginPath();
+
+
+    scores.forEach(
+        (score, index) => {
+
+            const x =
+                padding +
+                (
+                    index /
+                    Math.max(
+                        scores.length - 1,
+                        1
+                    )
+                ) *
+                (
+                    width -
+                    padding * 2
+                );
+
+
+            const y =
+                height -
+                padding -
+                (
+                    score / 100
+                ) *
+                (
+                    height -
+                    padding * 2
+                );
+
+
+            if (index === 0) {
+
+                ctx.moveTo(
+                    x,
+                    y
+                );
+
+            }
+
+            else {
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
+
+        }
+    );
+
+
+    ctx.stroke();
+
+
+    // POINTS
+
+    scores.forEach(
+        (score, index) => {
+
+            const x =
+                padding +
+                (
+                    index /
+                    Math.max(
+                        scores.length - 1,
+                        1
+                    )
+                ) *
+                (
+                    width -
+                    padding * 2
+                );
+
+
+            const y =
+                height -
+                padding -
+                (
+                    score / 100
+                ) *
+                (
+                    height -
+                    padding * 2
+                );
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
     );
 
 }

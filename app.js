@@ -485,10 +485,6 @@ function runSimulation() {
     }
 
 
-    // Remove old message
-
-    historyElement.innerHTML = "";
-
 
     // Create record
 

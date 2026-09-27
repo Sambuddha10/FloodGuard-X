@@ -2,87 +2,286 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>FloodGuard-X | Flood Risk Detection</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+    <title>FloodGuard-X</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            margin-top: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        #riskLevel {
+            font-size: 42px;
+            font-weight: bold;
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .values {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .value {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .value p {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 13px 25px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #anomalyStatus {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .safe {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .warning {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .history-item {
+            text-align: left;
+            background: #f8fafc;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 800px) {
+
+            .values {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .values {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
     <h1>🌊 FloodGuard-X</h1>
-    <p>Flood Risk Detection & Disaster Management System</p>
+
+    <p>
+        Flood Risk Detection & Disaster Management System
+    </p>
+
 </header>
+
 
 <main>
 
-    <section class="status-card">
+
+    <!-- RISK -->
+
+    <section class="box">
+
         <h2>Current Flood Risk</h2>
 
-        <div id="riskLevel" class="risk-low">
+        <div id="riskLevel" class="low">
             LOW
         </div>
 
         <p id="riskMessage">
             Current conditions indicate a low flood risk.
         </p>
+
     </section>
 
 
-    <section class="dashboard">
+    <!-- ENVIRONMENT -->
 
-        <div class="card">
+    <section class="values">
+
+        <div class="value">
+
             <h3>🌧️ Rainfall</h3>
-            <p id="rainfall">20 mm</p>
+
+            <p id="rainfall">
+                20 mm
+            </p>
+
         </div>
 
-        <div class="card">
+
+        <div class="value">
+
             <h3>🌊 Water Level</h3>
-            <p id="waterLevel">1.2 m</p>
+
+            <p id="waterLevel">
+                1.2 m
+            </p>
+
         </div>
 
-        <div class="card">
+
+        <div class="value">
+
             <h3>💧 Soil Moisture</h3>
-            <p id="soilMoisture">40%</p>
+
+            <p id="soilMoisture">
+                40%
+            </p>
+
         </div>
 
-        <div class="card">
+
+        <div class="value">
+
             <h3>🌡️ Temperature</h3>
-            <p id="temperature">28°C</p>
+
+            <p id="temperature">
+                28°C
+            </p>
+
         </div>
 
     </section>
 
 
-    <section class="simulation">
+    <!-- SIMULATOR -->
+
+    <section class="box">
 
         <h2>🌊 Flood Risk Simulator</h2>
 
-        <p>Select an environmental scenario:</p>
+        <p>
+            Select an environmental scenario:
+        </p>
+
 
         <select id="scenarioSelect">
 
-            <option value="random">Random Conditions</option>
+            <option value="random">
+                Random Conditions
+            </option>
 
-            <option value="normal">Normal Conditions</option>
+            <option value="normal">
+                Normal Conditions
+            </option>
 
-            <option value="heavyRain">Heavy Rainfall</option>
+            <option value="heavyRain">
+                Heavy Rainfall
+            </option>
 
-            <option value="risingWater">Rising Water Level</option>
+            <option value="risingWater">
+                Rising Water Level
+            </option>
 
-            <option value="extremeFlood">Extreme Flood</option>
+            <option value="extremeFlood">
+                Extreme Flood
+            </option>
 
         </select>
 
+
         <br>
-        <br>
+
 
         <button id="runButton">
             Run Simulation
         </button>
+
 
         <p id="simulationResult">
             Select a scenario and run the simulation.
@@ -91,22 +290,32 @@
     </section>
 
 
-    <section class="anomaly-panel">
+    <!-- ANOMALY -->
+
+    <section class="box">
 
         <h2>⚠️ Anomaly Detection</h2>
 
-        <div id="anomalyStatus" class="anomaly-safe">
+        <div id="anomalyStatus"
+             class="safe">
+
             NO ANOMALY
+
         </div>
 
+
         <p id="anomalyMessage">
+
             No unusual environmental conditions detected.
+
         </p>
 
     </section>
 
 
-    <section class="history-panel">
+    <!-- HISTORY -->
+
+    <section class="box">
 
         <h2>📊 Risk History</h2>
 
@@ -114,19 +323,483 @@
 
     </section>
 
+
 </main>
 
 
-<footer>
-
-    <p>
-        FloodGuard-X | Disaster Management Research Project
-    </p>
-
-</footer>
+<script>
 
 
-<script src="app.js"></script>
+// =====================================================
+// FLOODGUARD-X SINGLE FILE TEST
+// =====================================================
+
+
+const runButton =
+    document.getElementById("runButton");
+
+
+runButton.addEventListener(
+    "click",
+    runSimulation
+);
+
+
+// =====================================================
+// SCENARIO
+// =====================================================
+
+function generateScenario(type) {
+
+    if (type === "normal") {
+
+        return {
+            rainfall: 20,
+            waterLevel: 1.2,
+            soilMoisture: 40,
+            temperature: 28
+        };
+
+    }
+
+
+    if (type === "heavyRain") {
+
+        return {
+            rainfall: 110,
+            waterLevel: 2.2,
+            soilMoisture: 75,
+            temperature: 25
+        };
+
+    }
+
+
+    if (type === "risingWater") {
+
+        return {
+            rainfall: 70,
+            waterLevel: 3.5,
+            soilMoisture: 85,
+            temperature: 26
+        };
+
+    }
+
+
+    if (type === "extremeFlood") {
+
+        return {
+            rainfall: 140,
+            waterLevel: 4.5,
+            soilMoisture: 95,
+            temperature: 24
+        };
+
+    }
+
+
+    return {
+
+        rainfall:
+            Math.floor(Math.random() * 150),
+
+        waterLevel:
+            Number(
+                (Math.random() * 5).toFixed(2)
+            ),
+
+        soilMoisture:
+            Math.floor(Math.random() * 100),
+
+        temperature:
+            Math.floor(
+                20 + Math.random() * 20
+            )
+
+    };
+
+}
+
+
+// =====================================================
+// RISK CALCULATION
+// =====================================================
+
+function calculateRisk(
+    rainfall,
+    waterLevel,
+    soilMoisture
+) {
+
+    let score = 0;
+
+
+    if (rainfall >= 100) {
+
+        score += 40;
+
+    }
+
+    else if (rainfall >= 50) {
+
+        score += 20;
+
+    }
+
+
+    if (waterLevel >= 3) {
+
+        score += 40;
+
+    }
+
+    else if (waterLevel >= 2) {
+
+        score += 20;
+
+    }
+
+
+    if (soilMoisture >= 80) {
+
+        score += 20;
+
+    }
+
+
+    let level;
+
+
+    if (score >= 70) {
+
+        level = "HIGH";
+
+    }
+
+    else if (score >= 40) {
+
+        level = "MEDIUM";
+
+    }
+
+    else {
+
+        level = "LOW";
+
+    }
+
+
+    return {
+
+        score: score,
+        level: level
+
+    };
+
+}
+
+
+// =====================================================
+// ANOMALY
+// =====================================================
+
+function detectAnomaly(
+    rainfall,
+    waterLevel,
+    soilMoisture
+) {
+
+    let score = 0;
+
+    let messages = [];
+
+
+    if (rainfall >= 120) {
+
+        score += 40;
+
+        messages.push(
+            "Extremely high rainfall detected."
+        );
+
+    }
+
+    else if (rainfall >= 90) {
+
+        score += 20;
+
+        messages.push(
+            "Unusually high rainfall detected."
+        );
+
+    }
+
+
+    if (waterLevel >= 4) {
+
+        score += 40;
+
+        messages.push(
+            "Critical water level detected."
+        );
+
+    }
+
+    else if (waterLevel >= 3) {
+
+        score += 20;
+
+        messages.push(
+            "Unusually high water level detected."
+        );
+
+    }
+
+
+    if (soilMoisture >= 90) {
+
+        score += 20;
+
+        messages.push(
+            "Extremely high soil moisture detected."
+        );
+
+    }
+
+
+    return {
+
+        isAnomaly: score >= 40,
+
+        messages: messages
+
+    };
+
+}
+
+
+// =====================================================
+// MAIN
+// =====================================================
+
+function runSimulation() {
+
+
+    const selected =
+        document.getElementById(
+            "scenarioSelect"
+        ).value;
+
+
+    const scenario =
+        generateScenario(selected);
+
+
+    // VALUES
+
+    document.getElementById(
+        "rainfall"
+    ).innerText =
+        scenario.rainfall + " mm";
+
+
+    document.getElementById(
+        "waterLevel"
+    ).innerText =
+        scenario.waterLevel + " m";
+
+
+    document.getElementById(
+        "soilMoisture"
+    ).innerText =
+        scenario.soilMoisture + "%";
+
+
+    document.getElementById(
+        "temperature"
+    ).innerText =
+        scenario.temperature + "°C";
+
+
+    // RISK
+
+    const risk =
+        calculateRisk(
+            scenario.rainfall,
+            scenario.waterLevel,
+            scenario.soilMoisture
+        );
+
+
+    const riskElement =
+        document.getElementById(
+            "riskLevel"
+        );
+
+
+    riskElement.className = "";
+
+
+    if (risk.level === "HIGH") {
+
+        riskElement.classList.add("high");
+
+        riskElement.innerText =
+            "HIGH";
+
+    }
+
+    else if (risk.level === "MEDIUM") {
+
+        riskElement.classList.add("medium");
+
+        riskElement.innerText =
+            "MEDIUM";
+
+    }
+
+    else {
+
+        riskElement.classList.add("low");
+
+        riskElement.innerText =
+            "LOW";
+
+    }
+
+
+    document.getElementById(
+        "riskMessage"
+    ).innerText =
+
+        "Flood risk level: " +
+        risk.level;
+
+
+    document.getElementById(
+        "simulationResult"
+    ).innerText =
+
+        "Simulation completed. Risk score: " +
+        risk.score;
+
+
+    // ANOMALY
+
+    const anomaly =
+        detectAnomaly(
+            scenario.rainfall,
+            scenario.waterLevel,
+            scenario.soilMoisture
+        );
+
+
+    const anomalyStatus =
+        document.getElementById(
+            "anomalyStatus"
+        );
+
+
+    const anomalyMessage =
+        document.getElementById(
+            "anomalyMessage"
+        );
+
+
+    if (anomaly.isAnomaly) {
+
+        anomalyStatus.className =
+            "warning";
+
+        anomalyStatus.innerText =
+            "ANOMALY DETECTED";
+
+
+        anomalyMessage.innerText =
+            anomaly.messages.join(" ");
+
+    }
+
+    else {
+
+        anomalyStatus.className =
+            "safe";
+
+        anomalyStatus.innerText =
+            "NO ANOMALY";
+
+
+        anomalyMessage.innerText =
+            "No unusual environmental conditions detected.";
+
+    }
+
+
+    // HISTORY
+
+    const history =
+        document.getElementById(
+            "riskHistory"
+        );
+
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.className =
+        "history-item";
+
+
+    item.innerHTML =
+
+        "<strong>Simulation Recorded</strong><br>" +
+
+        "Time: " +
+        new Date().toLocaleString() +
+        "<br>" +
+
+        "Scenario: " +
+        selected +
+        "<br>" +
+
+        "Rainfall: " +
+        scenario.rainfall +
+        " mm<br>" +
+
+        "Water Level: " +
+        scenario.waterLevel +
+        " m<br>" +
+
+        "Soil Moisture: " +
+        scenario.soilMoisture +
+        "%<br>" +
+
+        "Temperature: " +
+        scenario.temperature +
+        "°C<br>" +
+
+        "Risk: " +
+        risk.level +
+        "<br>" +
+
+        "Risk Score: " +
+        risk.score +
+        "<br>" +
+
+        "Anomaly: " +
+        (anomaly.isAnomaly ? "YES" : "NO");
+
+
+    history.appendChild(item);
+
+}
+
+</script>
+
 
 </body>
 

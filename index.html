@@ -17,9 +17,13 @@
         <p>Flood Risk Detection & Disaster Management System</p>
     </header>
 
+
     <main>
 
+        <!-- CURRENT RISK -->
+
         <section class="status-card">
+
             <h2>Current Flood Risk</h2>
 
             <div id="riskLevel">
@@ -29,8 +33,11 @@
             <p id="riskMessage">
                 Current conditions indicate a low flood risk.
             </p>
+
         </section>
 
+
+        <!-- ENVIRONMENTAL DATA -->
 
         <section class="dashboard">
 
@@ -57,83 +64,105 @@
         </section>
 
 
-       <section class="simulation">
+        <!-- SIMULATOR -->
 
-    <h2>🌊 Flood Risk Simulator</h2>
+        <section class="simulation">
 
-    <p>Select an environmental scenario:</p>
+            <h2>🌊 Flood Risk Simulator</h2>
 
-    <select id="scenarioSelect">
+            <p>Select an environmental scenario:</p>
 
-        <option value="random">
-            Random Conditions
-        </option>
+            <select id="scenarioSelect">
 
-        <option value="normal">
-            Normal Conditions
-        </option>
+                <option value="random">
+                    Random Conditions
+                </option>
 
-        <option value="heavyRain">
-            Heavy Rainfall
-        </option>
+                <option value="normal">
+                    Normal Conditions
+                </option>
 
-        <option value="risingWater">
-            Rising Water Level
-        </option>
+                <option value="heavyRain">
+                    Heavy Rainfall
+                </option>
 
-        <option value="extremeFlood">
-            Extreme Flood
-        </option>
+                <option value="risingWater">
+                    Rising Water Level
+                </option>
 
-    </select>
+                <option value="extremeFlood">
+                    Extreme Flood
+                </option>
 
-    <br><br>
+            </select>
 
-    <button onclick="runSimulation()">
-        Run Simulation
-    </button>
+            <br>
+            <br>
 
-    <p id="simulationResult">
-        Select a scenario and run the simulation.
-    </p>
+            <button onclick="runSimulation()">
+                Run Simulation
+            </button>
 
-</section>
+            <p id="simulationResult">
+                Select a scenario and run the simulation.
+            </p>
+
+        </section>
+
+
+        <!-- ANOMALY DETECTION -->
+
         <section class="anomaly-panel">
 
-    <h2>⚠️ Anomaly Detection</h2>
+            <h2>⚠️ Anomaly Detection</h2>
 
-    <div id="anomalyStatus">
-        NO ANOMALY
-    </div>
+            <div id="anomalyStatus" class="anomaly-safe">
+                NO ANOMALY
+            </div>
 
-    <p id="anomalyMessage">
-        No unusual environmental conditions detected.
-    </p>
+            <p id="anomalyMessage">
+                No unusual environmental conditions detected.
+            </p>
 
-</section>
+        </section>
+
+
+        <!-- RISK HISTORY -->
+
         <section class="history-panel">
 
-    <h2>📊 Risk History</h2>
+            <h2>📊 Risk History</h2>
 
-    <div id="riskHistory">
-        No simulations recorded yet.
-    </div>
+            <div id="riskHistory">
 
-</section>
+                <p id="historyEmpty">
+                    No simulations recorded yet.
+                </p>
+
+            </div>
+
+        </section>
 
     </main>
 
 
     <footer>
-        <p>FloodGuard-X | Disaster Management Research Project</p>
+
+        <p>
+            FloodGuard-X | Disaster Management Research Project
+        </p>
+
     </footer>
 
 
+    <!-- JavaScript modules -->
+
     <script src="js/simulator.js"></script>
-<script src="js/riskEngine.js"></script>
-<script src="js/anomaly.js"></script>
-<script src="js/charts.js"></script>
-<script src="app.js"></script>
+    <script src="js/riskEngine.js"></script>
+    <script src="js/anomaly.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="app.js"></script>
+
 </body>
 
 </html>

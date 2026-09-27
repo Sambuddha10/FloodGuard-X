@@ -498,53 +498,59 @@ function runSimulation() {
         "history-item";
 
 
-    historyItem.innerHTML = `
+    const timestamp =
+    new Date().toLocaleString();
 
-        <strong>
-            Simulation Recorded
-        </strong>
+historyItem.innerHTML = `
 
-        <br><br>
+    <strong>Simulation Recorded</strong>
 
-        <strong>Scenario:</strong>
-        ${selectedScenario}
+    <br><br>
 
-        <br>
+    <strong>Time:</strong>
+    ${timestamp}
 
-        <strong>Rainfall:</strong>
-        ${scenario.rainfall} mm
+    <br>
 
-        <br>
+    <strong>Scenario:</strong>
+    ${selectedScenario}
 
-        <strong>Water Level:</strong>
-        ${scenario.waterLevel} m
+    <br>
 
-        <br>
+    <strong>Rainfall:</strong>
+    ${scenario.rainfall} mm
 
-        <strong>Soil Moisture:</strong>
-        ${scenario.soilMoisture}%
+    <br>
 
-        <br>
+    <strong>Water Level:</strong>
+    ${scenario.waterLevel} m
 
-        <strong>Temperature:</strong>
-        ${scenario.temperature}°C
+    <br>
 
-        <br>
+    <strong>Soil Moisture:</strong>
+    ${scenario.soilMoisture}%
 
-        <strong>Risk:</strong>
-        ${result.level}
+    <br>
 
-        <br>
+    <strong>Temperature:</strong>
+    ${scenario.temperature}°C
 
-        <strong>Risk Score:</strong>
-        ${result.score}
+    <br>
 
-        <br>
+    <strong>Risk:</strong>
+    ${result.level}
 
-        <strong>Anomaly:</strong>
-        ${anomaly.isAnomaly ? "YES" : "NO"}
+    <br>
 
-    `;
+    <strong>Risk Score:</strong>
+    ${result.score}
+
+    <br>
+
+    <strong>Anomaly:</strong>
+    ${anomaly.isAnomaly ? "YES" : "NO"}
+
+`;
 
 
     // Add record

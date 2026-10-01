@@ -163,6 +163,43 @@
             font-weight: bold;
         }
 
+        /* EXPLANATION */
+
+        .explanation {
+            text-align: left;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
+
+        .explanation h3 {
+            margin-top: 0;
+        }
+
+        .explanation-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .explanation-row:last-child {
+            border-bottom: none;
+        }
+
+        .explanation-value {
+            font-weight: bold;
+        }
+
+        .final-explanation {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: white;
+            font-weight: bold;
+        }
+
         /* CHART */
 
         #riskChart {
@@ -216,6 +253,11 @@
 
             main {
                 padding: 10px;
+            }
+
+            .explanation-row {
+                flex-direction: column;
+                gap: 5px;
             }
 
         }
@@ -444,6 +486,93 @@
 
         </div>
 
+
+        <!-- EXPLAINABLE RISK -->
+
+        <div class="explanation">
+
+            <h3>🔍 Why is this risk level?</h3>
+
+
+            <div class="explanation-row">
+
+                <span>
+                    🌧️ Rainfall contribution
+                </span>
+
+                <span
+                    id="explainRainfall"
+                    class="explanation-value">
+
+                    0.0
+
+                </span>
+
+            </div>
+
+
+            <div class="explanation-row">
+
+                <span>
+                    🌊 Water-level contribution
+                </span>
+
+                <span
+                    id="explainWater"
+                    class="explanation-value">
+
+                    0.0
+
+                </span>
+
+            </div>
+
+
+            <div class="explanation-row">
+
+                <span>
+                    💧 Soil-moisture contribution
+                </span>
+
+                <span
+                    id="explainSoil"
+                    class="explanation-value">
+
+                    0.0
+
+                </span>
+
+            </div>
+
+
+            <div class="explanation-row">
+
+                <span>
+                    📊 Total Flood Risk Index
+                </span>
+
+                <span
+                    id="explainTotal"
+                    class="explanation-value">
+
+                    0.0
+
+                </span>
+
+            </div>
+
+
+            <div
+                id="finalExplanation"
+                class="final-explanation">
+
+                Run a simulation to see why
+                the risk level was assigned.
+
+            </div>
+
+        </div>
+
     </section>
 
 
@@ -654,9 +783,7 @@ function calculateRisk(
 ) {
 
 
-    // ---------------------------------------------
     // NORMALIZATION
-    // ---------------------------------------------
 
     const rainfallScore =
         Math.min(
@@ -688,9 +815,7 @@ function calculateRisk(
         );
 
 
-    // ---------------------------------------------
     // WEIGHTED CONTRIBUTIONS
-    // ---------------------------------------------
 
     const rainfallContribution =
         rainfallScore * 0.40;
@@ -704,9 +829,7 @@ function calculateRisk(
         soilMoistureScore * 0.20;
 
 
-    // ---------------------------------------------
-    // FINAL FLOOD RISK INDEX
-    // ---------------------------------------------
+    // FINAL FRI
 
     const riskScore =
         rainfallContribution +
@@ -714,9 +837,7 @@ function calculateRisk(
         soilMoistureContribution;
 
 
-    // ---------------------------------------------
     // CLASSIFICATION
-    // ---------------------------------------------
 
     let level;
 
@@ -874,7 +995,7 @@ function detectAnomaly(
 function runSimulation() {
 
 
-    // GET SELECTED SCENARIO
+    // GET SCENARIO
 
     const selected =
         document
@@ -922,7 +1043,7 @@ function runSimulation() {
             "°C";
 
 
-    // CALCULATE FLOOD RISK INDEX
+    // CALCULATE RISK
 
     const risk =
         calculateRisk(
@@ -937,7 +1058,7 @@ function runSimulation() {
 
 
     // =================================================
-    // UPDATE RISK LEVEL
+    // RISK LEVEL
     // =================================================
 
     const riskElement =
@@ -1006,7 +1127,7 @@ function runSimulation() {
 
 
     // =================================================
-    // UPDATE FRI DISPLAY
+    // FRI DISPLAY
     // =================================================
 
     document
@@ -1022,7 +1143,6 @@ function runSimulation() {
             "rainfallContribution"
         )
         .innerText =
-
             risk.rainfallContribution;
 
 
@@ -1031,7 +1151,6 @@ function runSimulation() {
             "waterContribution"
         )
         .innerText =
-
             risk.waterLevelContribution;
 
 
@@ -1040,8 +1159,89 @@ function runSimulation() {
             "soilContribution"
         )
         .innerText =
+            risk.soilMoistureContribution;
+
+
+    // =================================================
+    // EXPLAINABLE RISK
+    // =================================================
+
+    document
+        .getElementById(
+            "explainRainfall"
+        )
+        .innerText =
+
+            risk.rainfallContribution;
+
+
+    document
+        .getElementById(
+            "explainWater"
+        )
+        .innerText =
+
+            risk.waterLevelContribution;
+
+
+    document
+        .getElementById(
+            "explainSoil"
+        )
+        .innerText =
 
             risk.soilMoistureContribution;
+
+
+    document
+        .getElementById(
+            "explainTotal"
+        )
+        .innerText =
+            risk.score;
+
+
+    const finalExplanation =
+        document.getElementById(
+            "finalExplanation"
+        );
+
+
+    if (risk.level === "HIGH") {
+
+        finalExplanation.innerText =
+
+            "HIGH risk because the combined " +
+            "weighted environmental factors " +
+            "produced a Flood Risk Index of " +
+            risk.score +
+            ", which is above the HIGH-risk threshold of 70.";
+
+    }
+
+    else if (risk.level === "MEDIUM") {
+
+        finalExplanation.innerText =
+
+            "MEDIUM risk because the combined " +
+            "weighted environmental factors " +
+            "produced a Flood Risk Index of " +
+            risk.score +
+            ", which falls between 40 and 69.9.";
+
+    }
+
+    else {
+
+        finalExplanation.innerText =
+
+            "LOW risk because the combined " +
+            "weighted environmental factors " +
+            "produced a Flood Risk Index of " +
+            risk.score +
+            ", which is below 40.";
+
+    }
 
 
     // =================================================
@@ -1192,7 +1392,7 @@ function runSimulation() {
 
 
     // =================================================
-    // ADD SCORE TO RISK TREND
+    // RISK TREND
     // =================================================
 
     riskScores.push(
@@ -1206,7 +1406,7 @@ function runSimulation() {
 
 
 // =====================================================
-// RISK TREND
+// RISK TREND GRAPH
 // =====================================================
 
 function updateRiskChart() {
@@ -1329,7 +1529,7 @@ function updateRiskChart() {
     );
 
 
-    // LINE
+    // GRAPH LINE
 
     ctx.beginPath();
 
@@ -1399,7 +1599,7 @@ function updateRiskChart() {
     ctx.stroke();
 
 
-    // POINTS + LABELS
+    // POINTS + SCORE LABELS
 
     riskScores.forEach(
         function(

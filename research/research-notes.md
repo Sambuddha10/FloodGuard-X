@@ -523,4 +523,124 @@ Therefore, variable influence depends on both:
 This experiment measures influence within the proposed mathematical model.
 
 It does not establish the actual real-world importance of rainfall, water level, or soil moisture f
+# Experiment 7: Variable Interaction Analysis
+
+## Objective
+
+To investigate how combinations of environmental variables affect the Flood Risk Index (FRI).
+
+The experiment examines whether multiple elevated environmental conditions produce a different risk level compared with elevated conditions occurring individually.
+
+## Method
+
+The current FRI model uses:
+
+* Rainfall = 40%
+* Water Level = 40%
+* Soil Moisture = 20%
+
+Several controlled combinations of environmental conditions were tested while using the same normalization and weighting structure.
+
+## Interaction Scenarios
+
+| Scenario                           |   FRI |
+| ---------------------------------- | ----: |
+| High Rainfall + Low Water          | 50.00 |
+| Low Rainfall + High Water          | 50.00 |
+| High Rainfall + High Water         | 74.00 |
+| High Rainfall + High Soil Moisture | 67.00 |
+| High Water + High Soil Moisture    | 67.00 |
+| All High Conditions                | 92.33 |
+
+## Interaction Comparison
+
+The first three scenarios provide a direct comparison:
+
+| Condition                  |   FRI |
+| -------------------------- | ----: |
+| High Rainfall + Low Water  | 50.00 |
+| Low Rainfall + High Water  | 50.00 |
+| High Rainfall + High Water | 74.00 |
+
+When either rainfall or water level was elevated while the other remained relatively low, the FRI was 50.00.
+
+When both rainfall and water level were elevated, the FRI increased to 74.00.
+
+This shows that simultaneous high values from strongly weighted variables can substantially increase the overall FRI.
+
+## Multi-Variable Interaction
+
+Additional combinations were tested:
+
+| Combination                        |   FRI |
+| ---------------------------------- | ----: |
+| High Rainfall + High Soil Moisture | 67.00 |
+| High Water + High Soil Moisture    | 67.00 |
+| All High Conditions                | 92.33 |
+
+The combination of all three elevated environmental variables produced an FRI of 92.33, which is substantially higher than the scenarios containing only two elevated variables.
+
+## Finding
+
+The experiment demonstrates that combinations of elevated environmental variables can produce substantially higher FRI values than conditions where only one major variable is elevated.
+
+In particular, combining high rainfall and high water level increased the FRI from 50.00 for either individual high-condition scenario to 74.00 when both conditions were high.
+
+When rainfall, water level, and soil moisture were all elevated, the FRI reached 92.33.
+
+This indicates that the current weighted model responds strongly to simultaneous increases in multiple environmental variables.
+
+## Interpretation
+
+The result demonstrates an important property of the additive FRI model.
+
+Because the contributions from rainfall, water level, and soil moisture are combined, simultaneous increases in multiple variables accumulate in the final FRI.
+
+The experiment therefore provides evidence that the model can represent increasing risk associated with multiple elevated environmental conditions.
+
+However, the current model does not contain an explicit nonlinear interaction term. The observed combined effect is therefore the result of adding the weighted contributions of the variables.
+
+## Limitation
+
+This experiment demonstrates mathematical interaction within the proposed FRI model.
+
+It does not prove that the tested combinations accurately represent real-world flood interactions.
+
+Real-world environmental variables may interact in nonlinear ways that are not captured by the current additive model.
+
+Validation using appropriate observational data would be required to investigate real-world interaction effects.
+
+---
+
+# Updated Overall Research Findings
+
+The seven experiments provide an initial evaluation of the FloodGuard-X model.
+
+The experiments demonstrate that:
+
+1. The FRI calculation consistently applies the predefined mathematical model.
+2. Rainfall and water level have greater model influence than soil moisture under the current weighting structure.
+3. Rainfall and water level show similar relative contributions across the tested scenarios.
+4. Alternative rainfall and water-level weights change numerical FRI values while the tested scenarios retain their original risk categories.
+5. The LOW/MEDIUM and MEDIUM/HIGH classification boundaries operate consistently.
+6. The rule-based anomaly mechanism can identify severe or combined unusual environmental conditions.
+7. The model provides interpretable explanations for risk, anomaly detection, and variable contributions.
+8. Variable influence depends on both the assigned weight and the normalized environmental value.
+9. Simultaneously elevated environmental variables can substantially increase the final FRI.
+10. The current additive model represents combined conditions through the accumulation of weighted variable contributions.
+
+These findings describe the behavior of the proposed model under controlled synthetic conditions and should not be interpreted as evidence of real-world predictive accuracy.
+
+---
+
+# Updated Research Question
+
+Based on the completed experiments, the research can be framed around:
+
+**How does the weighting and interaction of environmental variables affect the sensitivity and stability of a lightweight, explainable, dataset-free flood-risk model?**
+
+A supporting question is:
+
+**How effectively can a lightweight, explainable flood-risk model estimate changing flood risk using controlled synthetic environmental conditions without relying on historical datasets?**
+
 

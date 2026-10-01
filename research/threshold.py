@@ -3,6 +3,11 @@
 # Experiment 4: Threshold Stability Analysis
 # =====================================================
 
+
+# -----------------------------------------------------
+# RISK CLASSIFICATION
+# -----------------------------------------------------
+
 def classify_risk(fri):
 
     if fri >= 70:
@@ -47,7 +52,7 @@ print()
 
 
 # -----------------------------------------------------
-# RISK THRESHOLDS
+# RISK CLASSIFICATION THRESHOLDS
 # -----------------------------------------------------
 
 print("RISK CLASSIFICATION THRESHOLDS")
@@ -97,8 +102,6 @@ print("=" * 65)
 print()
 
 
-# LOW -> MEDIUM
-
 print("LOW -> MEDIUM boundary")
 
 print(
@@ -118,8 +121,6 @@ print(
 
 print()
 
-
-# MEDIUM -> HIGH
 
 print("MEDIUM -> HIGH boundary")
 

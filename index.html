@@ -127,6 +127,44 @@
             color: #991b1b;
         }
 
+        /* FRI */
+
+        .fri-score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 15px;
+        }
+
+        .fri-description {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .contributions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contribution {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .contribution h3 {
+            margin-top: 0;
+        }
+
+        .contribution .number {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        /* CHART */
+
         #riskChart {
             width: 100%;
             max-width: 800px;
@@ -141,6 +179,8 @@
         #chartMessage {
             color: #64748b;
         }
+
+        /* HISTORY */
 
         .history-item {
             text-align: left;
@@ -160,6 +200,10 @@
 
             .values {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contributions {
+                grid-template-columns: 1fr;
             }
 
         }
@@ -316,18 +360,111 @@
     </section>
 
 
+    <!-- FLOOD RISK INDEX -->
+
+    <section class="box">
+
+        <h2>📐 Flood Risk Index</h2>
+
+        <div
+            id="friScore"
+            class="fri-score">
+
+            0.0
+
+        </div>
+
+        <p class="fri-description">
+
+            Weighted environmental risk score
+            from 0 to 100.
+
+        </p>
+
+
+        <div class="contributions">
+
+
+            <div class="contribution">
+
+                <h3>🌧️ Rainfall</h3>
+
+                <div
+                    id="rainfallContribution"
+                    class="number">
+
+                    0.0
+
+                </div>
+
+                <p>
+                    Weight: 40%
+                </p>
+
+            </div>
+
+
+            <div class="contribution">
+
+                <h3>🌊 Water Level</h3>
+
+                <div
+                    id="waterContribution"
+                    class="number">
+
+                    0.0
+
+                </div>
+
+                <p>
+                    Weight: 40%
+                </p>
+
+            </div>
+
+
+            <div class="contribution">
+
+                <h3>💧 Soil Moisture</h3>
+
+                <div
+                    id="soilContribution"
+                    class="number">
+
+                    0.0
+
+                </div>
+
+                <p>
+                    Weight: 20%
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
     <!-- ANOMALY DETECTION -->
 
     <section class="box">
 
         <h2>⚠️ Anomaly Detection</h2>
 
-        <div id="anomalyStatus" class="safe">
+        <div
+            id="anomalyStatus"
+            class="safe">
+
             NO ANOMALY
+
         </div>
 
         <p id="anomalyMessage">
+
             No unusual environmental conditions detected.
+
         </p>
 
     </section>
@@ -346,7 +483,9 @@
         </canvas>
 
         <p id="chartMessage">
+
             Run simulations to generate the risk trend.
+
         </p>
 
     </section>
@@ -379,7 +518,7 @@
 
 
 // =====================================================
-// RISK SCORES FOR GRAPH
+// RISK SCORE STORAGE
 // =====================================================
 
 let riskScores = [];
@@ -505,7 +644,7 @@ function generateScenario(type) {
 
 
 // =====================================================
-// RISK CALCULATION
+// FLOOD RISK INDEX
 // =====================================================
 
 function calculateRisk(
@@ -515,52 +654,80 @@ function calculateRisk(
 ) {
 
 
-    let score = 0;
+    // ---------------------------------------------
+    // NORMALIZATION
+    // ---------------------------------------------
+
+    const rainfallScore =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                (rainfall / 150) * 100
+            )
+        );
 
 
-    if (rainfall >= 100) {
-
-        score += 40;
-
-    }
-
-    else if (rainfall >= 50) {
-
-        score += 20;
-
-    }
+    const waterLevelScore =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                (waterLevel / 5) * 100
+            )
+        );
 
 
-    if (waterLevel >= 3) {
-
-        score += 40;
-
-    }
-
-    else if (waterLevel >= 2) {
-
-        score += 20;
-
-    }
+    const soilMoistureScore =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                soilMoisture
+            )
+        );
 
 
-    if (soilMoisture >= 80) {
+    // ---------------------------------------------
+    // WEIGHTED CONTRIBUTIONS
+    // ---------------------------------------------
 
-        score += 20;
+    const rainfallContribution =
+        rainfallScore * 0.40;
 
-    }
 
+    const waterLevelContribution =
+        waterLevelScore * 0.40;
+
+
+    const soilMoistureContribution =
+        soilMoistureScore * 0.20;
+
+
+    // ---------------------------------------------
+    // FINAL FLOOD RISK INDEX
+    // ---------------------------------------------
+
+    const riskScore =
+        rainfallContribution +
+        waterLevelContribution +
+        soilMoistureContribution;
+
+
+    // ---------------------------------------------
+    // CLASSIFICATION
+    // ---------------------------------------------
 
     let level;
 
 
-    if (score >= 70) {
+    if (riskScore >= 70) {
 
         level = "HIGH";
 
     }
 
-    else if (score >= 40) {
+    else if (riskScore >= 40) {
 
         level = "MEDIUM";
 
@@ -575,9 +742,43 @@ function calculateRisk(
 
     return {
 
-        score: score,
+        score:
+            Number(
+                riskScore.toFixed(1)
+            ),
 
-        level: level
+        level:
+            level,
+
+        rainfallScore:
+            Number(
+                rainfallScore.toFixed(1)
+            ),
+
+        waterLevelScore:
+            Number(
+                waterLevelScore.toFixed(1)
+            ),
+
+        soilMoistureScore:
+            Number(
+                soilMoistureScore.toFixed(1)
+            ),
+
+        rainfallContribution:
+            Number(
+                rainfallContribution.toFixed(1)
+            ),
+
+        waterLevelContribution:
+            Number(
+                waterLevelContribution.toFixed(1)
+            ),
+
+        soilMoistureContribution:
+            Number(
+                soilMoistureContribution.toFixed(1)
+            )
 
     };
 
@@ -673,7 +874,7 @@ function detectAnomaly(
 function runSimulation() {
 
 
-    // GET SCENARIO
+    // GET SELECTED SCENARIO
 
     const selected =
         document
@@ -683,13 +884,15 @@ function runSimulation() {
             .value;
 
 
-    // GENERATE
+    // GENERATE SCENARIO
 
     const scenario =
-        generateScenario(selected);
+        generateScenario(
+            selected
+        );
 
 
-    // UPDATE VALUES
+    // UPDATE ENVIRONMENTAL VALUES
 
     document
         .getElementById("rainfall")
@@ -719,7 +922,7 @@ function runSimulation() {
             "°C";
 
 
-    // CALCULATE RISK
+    // CALCULATE FLOOD RISK INDEX
 
     const risk =
         calculateRisk(
@@ -733,7 +936,9 @@ function runSimulation() {
         );
 
 
-    // UPDATE RISK
+    // =================================================
+    // UPDATE RISK LEVEL
+    // =================================================
 
     const riskElement =
         document.getElementById(
@@ -774,14 +979,20 @@ function runSimulation() {
 
 
     document
-        .getElementById("riskMessage")
+        .getElementById(
+            "riskMessage"
+        )
         .innerText =
 
-            "Flood risk level: " +
+            "Flood Risk Index: " +
+            risk.score +
+            " — " +
             risk.level;
 
 
-    // RESULT
+    // =================================================
+    // SIMULATION RESULT
+    // =================================================
 
     document
         .getElementById(
@@ -790,8 +1001,47 @@ function runSimulation() {
         .innerText =
 
             "Simulation completed. " +
-            "Risk score: " +
+            "Flood Risk Index: " +
             risk.score;
+
+
+    // =================================================
+    // UPDATE FRI DISPLAY
+    // =================================================
+
+    document
+        .getElementById(
+            "friScore"
+        )
+        .innerText =
+            risk.score;
+
+
+    document
+        .getElementById(
+            "rainfallContribution"
+        )
+        .innerText =
+
+            risk.rainfallContribution;
+
+
+    document
+        .getElementById(
+            "waterContribution"
+        )
+        .innerText =
+
+            risk.waterLevelContribution;
+
+
+    document
+        .getElementById(
+            "soilContribution"
+        )
+        .innerText =
+
+            risk.soilMoistureContribution;
 
 
     // =================================================
@@ -907,13 +1157,28 @@ function runSimulation() {
 
         <br>
 
-        <strong>Risk:</strong>
-        ${risk.level}
+        <strong>Rainfall Contribution:</strong>
+        ${risk.rainfallContribution}
 
         <br>
 
-        <strong>Risk Score:</strong>
+        <strong>Water Level Contribution:</strong>
+        ${risk.waterLevelContribution}
+
+        <br>
+
+        <strong>Soil Moisture Contribution:</strong>
+        ${risk.soilMoistureContribution}
+
+        <br>
+
+        <strong>Flood Risk Index:</strong>
         ${risk.score}
+
+        <br>
+
+        <strong>Risk:</strong>
+        ${risk.level}
 
         <br>
 
@@ -927,10 +1192,12 @@ function runSimulation() {
 
 
     // =================================================
-    // ADD SCORE TO GRAPH
+    // ADD SCORE TO RISK TREND
     // =================================================
 
-    riskScores.push(risk.score);
+    riskScores.push(
+        risk.score
+    );
 
 
     updateRiskChart();
@@ -939,7 +1206,7 @@ function runSimulation() {
 
 
 // =====================================================
-// RISK TREND GRAPH
+// RISK TREND
 // =====================================================
 
 function updateRiskChart() {
@@ -990,8 +1257,6 @@ function updateRiskChart() {
     }
 
 
-    // HIDE MESSAGE
-
     if (message) {
 
         message.style.display =
@@ -1011,9 +1276,7 @@ function updateRiskChart() {
     const padding = 50;
 
 
-    // =================================================
     // AXES
-    // =================================================
 
     ctx.beginPath();
 
@@ -1039,9 +1302,7 @@ function updateRiskChart() {
     ctx.stroke();
 
 
-    // =================================================
-    // Y AXIS LABELS
-    // =================================================
+    // Y-AXIS LABELS
 
     ctx.font =
         "14px Arial";
@@ -1068,15 +1329,16 @@ function updateRiskChart() {
     );
 
 
-    // =================================================
-    // GRAPH LINE
-    // =================================================
+    // LINE
 
     ctx.beginPath();
 
 
     riskScores.forEach(
-        function(score, index) {
+        function(
+            score,
+            index
+        ) {
 
 
             const x =
@@ -1137,12 +1399,13 @@ function updateRiskChart() {
     ctx.stroke();
 
 
-    // =================================================
-    // POINTS
-    // =================================================
+    // POINTS + LABELS
 
     riskScores.forEach(
-        function(score, index) {
+        function(
+            score,
+            index
+        ) {
 
 
             const x =
@@ -1198,8 +1461,6 @@ function updateRiskChart() {
 
             ctx.fill();
 
-
-            // SCORE LABEL
 
             ctx.font =
                 "12px Arial";

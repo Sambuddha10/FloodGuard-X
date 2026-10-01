@@ -420,3 +420,107 @@ The current research can be framed around:
 A broader supporting question is:
 
 **How effectively can a lightweight, explainable flood-risk model estimate changing flood risk using controlled synthetic environmental conditions without relying on historical datasets?**
+# Experiment 6: Variable Influence Analysis
+
+## Objective
+
+To measure the relative contribution of rainfall, water level, and soil moisture to the final Flood Risk Index (FRI) under selected synthetic flood scenarios.
+
+This experiment helps investigate which variables have the greatest influence on the model output under the current weighting and normalization structure.
+
+## Method
+
+The experiment uses four representative synthetic scenarios:
+
+1. Normal Conditions
+2. Heavy Rainfall
+3. Rising Water Level
+4. Extreme Flood
+
+For each scenario, the individual contribution of each variable to the final FRI is calculated.
+
+The current model uses:
+
+* Rainfall weight = 40%
+* Water Level weight = 40%
+* Soil Moisture weight = 20%
+
+## Scenario Results
+
+### Normal Conditions
+
+* Rainfall Contribution = 5.33
+* Water Level Contribution = 9.60
+* Soil Moisture Contribution = 8.00
+* Total FRI = 22.93
+
+### Heavy Rainfall
+
+* Rainfall Contribution = 29.33
+* Water Level Contribution = 17.60
+* Soil Moisture Contribution = 15.00
+* Total FRI = 61.93
+
+### Rising Water Level
+
+* Rainfall Contribution = 18.67
+* Water Level Contribution = 28.00
+* Soil Moisture Contribution = 17.00
+* Total FRI = 63.67
+
+### Extreme Flood
+
+* Rainfall Contribution = 37.33
+* Water Level Contribution = 36.00
+* Soil Moisture Contribution = 19.00
+* Total FRI = 92.33
+
+## Average Variable Contribution
+
+Across the four tested scenarios:
+
+| Variable      | Average Contribution |
+| ------------- | -------------------: |
+| Rainfall      |                22.67 |
+| Water Level   |                22.80 |
+| Soil Moisture |                14.75 |
+
+## Relative Contribution
+
+The average contributions were converted into relative percentages.
+
+| Variable      | Relative Contribution |
+| ------------- | --------------------: |
+| Rainfall      |                37.64% |
+| Water Level   |                37.86% |
+| Soil Moisture |                24.49% |
+
+## Finding
+
+The results show that rainfall and water level produced very similar average contributions to the FRI across the tested scenarios.
+
+Rainfall contributed approximately 37.64% of the combined average contribution, while water level contributed approximately 37.86%.
+
+Soil moisture contributed approximately 24.49%.
+
+The results are consistent with the current model structure, where rainfall and water level each have a 40% weight and soil moisture has a 20% weight.
+
+The experiment also shows that the dominant contributing variable can change between individual scenarios. For example, water level contributed more than rainfall in the Rising Water Level scenario, while rainfall contributed more than water level in the Heavy Rainfall scenario.
+
+## Interpretation
+
+The experiment demonstrates that the FloodGuard-X model responds differently to environmental conditions depending on their normalized values.
+
+A variable with a high normalized value can produce a larger contribution even when another variable has the same model weight.
+
+Therefore, variable influence depends on both:
+
+* The assigned model weight
+* The normalized value of the environmental variable
+
+## Limitation
+
+This experiment measures influence within the proposed mathematical model.
+
+It does not establish the actual real-world importance of rainfall, water level, or soil moisture f
+

@@ -4,381 +4,296 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>FloodGuard-X | Flood Risk Detection</title>
 
 <style>
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #07111f;
-    color: #ffffff;
-}
-
-header {
-    text-align: center;
-    padding: 28px 20px;
-    background: linear-gradient(135deg, #0b1d33, #102a47);
-    border-bottom: 1px solid #203b58;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 32px;
-}
-
-header p {
-    margin: 8px 0 0;
-    color: #91a6c0;
-    font-size: 15px;
+    background: #080b14;
+    color: #f4f7ff;
+    min-height: 100vh;
 }
 
 .container {
     width: min(1200px, 94%);
-    margin: 25px auto 50px;
+    margin: auto;
+}
+
+header {
+    padding: 35px 0 25px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 38px;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #aeb7ca;
+    font-size: 15px;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-}
-
-.card {
-    background: #0e1d30;
-    border: 1px solid #203b58;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-}
-
-.card h2 {
-    margin-top: 0;
-    margin-bottom: 18px;
-    font-size: 19px;
-}
-
-.status-card {
-    grid-column: span 2;
-    text-align: center;
-    padding: 28px;
-}
-
-.risk-level {
-    font-size: 38px;
-    font-weight: bold;
-    margin: 8px 0;
-}
-
-.risk-message {
-    color: #91a6c0;
     margin-bottom: 20px;
 }
 
-/* =========================
-   FRI BAR
-========================= */
-
-.fri-section {
-    margin-top: 28px;
+.card {
+    background: #101522;
+    border: 1px solid #20283a;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.22);
 }
 
-.fri-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: #91a6c0;
+.card h2 {
+    font-size: 20px;
+    margin-bottom: 18px;
 }
 
-.fri-value {
-    color: #ffffff;
-    font-weight: bold;
+.status-card {
+    text-align: center;
 }
 
-.fri-bar {
-    width: 100%;
-    height: 12px;
-    background: #172b42;
-    border-radius: 20px;
+.risk-level {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 10px 0;
+}
+
+.risk-message {
+    color: #aeb7ca;
+    line-height: 1.6;
+}
+
+.low {
+    color: #4ade80;
+}
+
+.medium {
+    color: #facc15;
+}
+
+.high {
+    color: #f87171;
+}
+
+/* Gauge */
+.gauge-wrapper {
+    position: relative;
+    width: 250px;
+    height: 135px;
+    margin: 20px auto 5px;
     overflow: hidden;
 }
 
-.fri-fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 20px;
-    background: #27c9a5;
-    transition: width 0.5s ease, background 0.5s ease;
-}
-
-/* =========================
-   CIRCULAR GAUGE
-========================= */
-
-.gauge-section {
-    margin-top: 25px;
-    padding-top: 5px;
-}
-
-.gauge-wrapper {
+.gauge {
     width: 250px;
     height: 250px;
-    margin: 10px auto 0;
-    position: relative;
-}
-
-.gauge {
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    left: 15px;
-    top: 5px;
     border-radius: 50%;
-
-    background:
-        conic-gradient(
-            from 0deg,
-            #27c9a5 0deg 144deg,
-            #ffc857 144deg 252deg,
-            #ff5c5c 252deg 360deg
-        );
-
-    transform: rotate(-90deg);
+    background: conic-gradient(
+        from 270deg,
+        #4ade80 0deg 72deg,
+        #facc15 72deg 126deg,
+        #f87171 126deg 180deg,
+        transparent 180deg
+    );
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
-.gauge::before {
+.gauge::after {
     content: "";
     position: absolute;
-    width: 178px;
-    height: 178px;
-    left: 21px;
-    top: 21px;
+    width: 190px;
+    height: 190px;
     border-radius: 50%;
-    background: #0e1d30;
+    background: #101522;
+    top: 30px;
+    left: 30px;
 }
 
 .gauge-needle {
     position: absolute;
-    width: 5px;
-    height: 88px;
-    background: #ffffff;
-    border-radius: 5px;
-
-    left: 122px;
-    top: 27px;
-
-    transform-origin: 50% 88px;
+    width: 4px;
+    height: 92px;
+    background: white;
+    left: 123px;
+    bottom: 7px;
+    transform-origin: bottom center;
     transform: rotate(-90deg);
-
-    transition: transform 0.6s ease;
     z-index: 3;
-}
-
-.gauge-needle::after {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: #ffffff;
-    border-radius: 50%;
-    left: -4.5px;
-    bottom: -7px;
+    border-radius: 5px;
 }
 
 .gauge-center {
     position: absolute;
-    width: 180px;
-    left: 35px;
-    top: 75px;
-    text-align: center;
     z-index: 4;
+    width: 100%;
+    text-align: center;
+    bottom: 2px;
 }
 
 .gauge-number {
-    font-size: 38px;
-    font-weight: bold;
-    line-height: 1.1;
+    font-size: 30px;
+    font-weight: 800;
 }
 
 .gauge-label {
     font-size: 10px;
-    color: #91a6c0;
-    margin-top: 7px;
-    letter-spacing: 0.8px;
+    color: #8d98ad;
+    margin-top: 3px;
 }
 
 .gauge-scale {
-    width: 220px;
-    margin: -2px auto 22px;
     display: flex;
     justify-content: space-between;
-    color: #91a6c0;
+    width: 230px;
+    margin: auto;
+    color: #7f8aa0;
     font-size: 12px;
 }
 
-.gauge-scale span {
-    min-width: 20px;
-    text-align: center;
+/* FRI bar */
+.fri-value {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 12px;
 }
 
-/* =========================
-   SIMULATION CONTROLS
-========================= */
-
-.simulator-card {
-    position: relative;
+.progress {
+    height: 14px;
+    background: #20283a;
+    border-radius: 20px;
     overflow: hidden;
 }
 
-.simulator-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.simulator-status {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 6px 10px;
+.progress-bar {
+    height: 100%;
+    width: 0%;
     border-radius: 20px;
-    background: #091727;
-    border: 1px solid #203b58;
-    color: #91a6c0;
-    font-size: 11px;
-    white-space: nowrap;
+    transition: width .4s ease;
+    background: #4ade80;
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #91a6c0;
-}
-
-.status-dot.active {
-    background: #27c9a5;
-    box-shadow: 0 0 8px rgba(39,201,165,0.7);
-}
-
-.control-label {
+/* Controls */
+label {
     display: block;
-    color: #91a6c0;
-    font-size: 12px;
-    margin-bottom: 7px;
+    color: #aeb7ca;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+select,
+button {
+    width: 100%;
+    padding: 13px 15px;
+    border-radius: 10px;
+    border: 1px solid #303a50;
+    background: #151c2c;
+    color: white;
+    font-size: 14px;
 }
 
 select {
-    width: 100%;
-    padding: 13px;
-    border-radius: 9px;
-    border: 1px solid #29435f;
-    background: #091727;
-    color: #ffffff;
-    margin-bottom: 10px;
-    font-size: 14px;
-    outline: none;
-}
-
-select:focus {
-    border-color: #247cff;
-}
-
-.scenario-description {
-    min-height: 42px;
-    padding: 11px 13px;
-    margin-bottom: 14px;
-    border-radius: 9px;
-    background: #091727;
-    border: 1px solid #203b58;
-    color: #91a6c0;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.button-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    margin-bottom: 12px;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 9px;
-    background: #247cff;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: bold;
     cursor: pointer;
-    transition: 0.2s ease;
+    font-weight: 700;
+    margin-top: 8px;
 }
 
 button:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+    background: #202a40;
 }
 
-button:active {
-    transform: translateY(0);
+.primary {
+    background: #6d4aff;
+    border-color: #6d4aff;
 }
 
-.reset-btn {
-    background: #203b58;
+.primary:hover {
+    background: #5837e8;
 }
 
-.simulation-message {
-    margin-top: 12px;
-    text-align: center;
-    color: #91a6c0;
-    font-size: 11px;
-    min-height: 15px;
+.reset {
+    background: transparent;
 }
 
-/* =========================
-   ENVIRONMENT
-========================= */
+.scenario-description {
+    color: #8f9ab0;
+    font-size: 13px;
+    line-height: 1.5;
+    background: #0b101c;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
 
-.sensor-grid {
+.simulation-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #b7c0d1;
+    font-size: 13px;
+    margin: 14px 0;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #6b7280;
+}
+
+.status-dot.active {
+    background: #4ade80;
+    box-shadow: 0 0 10px #4ade80;
+}
+
+/* Environment */
+.environment {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
 }
 
-.sensor {
-    background: #091727;
-    border: 1px solid #203b58;
+.metric {
+    background: #0b101c;
+    border: 1px solid #20283a;
+    border-radius: 12px;
     padding: 16px;
-    border-radius: 10px;
 }
 
-.sensor-label {
-    color: #91a6c0;
+.metric-title {
+    color: #7f8aa0;
     font-size: 12px;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 }
 
-.sensor-value {
+.metric-value {
     font-size: 22px;
-    font-weight: bold;
+    font-weight: 700;
 }
 
-/* =========================
-   CONTRIBUTIONS
-========================= */
-
+/* Contributions */
 .contribution {
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
-.contribution-top {
+.contribution-head {
     display: flex;
     justify-content: space-between;
     margin-bottom: 7px;
@@ -387,106 +302,70 @@ button:active {
 
 .contribution-bar {
     height: 9px;
-    background: #172b42;
-    border-radius: 20px;
+    background: #20283a;
+    border-radius: 10px;
     overflow: hidden;
 }
 
 .contribution-fill {
     height: 100%;
-    background: #247cff;
-    border-radius: 20px;
+    border-radius: 10px;
+    background: #6d4aff;
 }
 
-/* =========================
-   RECOMMENDATION
-========================= */
-
-.recommendation-card {
-    grid-column: span 2;
-}
-
-.recommendation-box {
-    border-radius: 14px;
-    padding: 20px;
-    background: #091727;
-    border: 1px solid #203b58;
-}
-
-.recommendation-status {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-}
-
-.recommendation-icon {
-    font-size: 30px;
-}
-
-.recommendation-title {
-    font-size: 21px;
-    font-weight: bold;
-}
-
-.recommendation-subtitle {
-    color: #91a6c0;
-    font-size: 13px;
-    margin-top: 3px;
-}
-
-.recommendation-list {
-    margin: 0;
-    padding-left: 22px;
-    color: #d6e0ec;
-    line-height: 1.8;
+/* Explanation */
+.explanation {
+    background: #0b101c;
+    border-radius: 12px;
+    padding: 16px;
+    color: #aeb7ca;
+    line-height: 1.6;
     font-size: 14px;
 }
 
-.recommendation-list li {
-    margin-bottom: 4px;
+/* Emergency */
+.emergency {
+    border-left: 4px solid #facc15;
 }
 
-.recommendation-note {
-    margin-top: 15px;
-    padding-top: 13px;
-    border-top: 1px solid #203b58;
-    color: #91a6c0;
-    font-size: 12px;
+.emergency h2 {
+    margin-bottom: 10px;
 }
 
-/* =========================
-   ANOMALY
-========================= */
+.emergency-text {
+    color: #c3cad8;
+    line-height: 1.6;
+}
 
+/* Anomaly */
 .anomaly-box {
-    padding: 15px;
-    border-radius: 10px;
-    background: #091727;
-    border: 1px solid #203b58;
-    color: #91a6c0;
+    padding: 16px;
+    border-radius: 12px;
+    background: #0b101c;
 }
 
-.anomaly-title {
-    font-weight: bold;
-    color: #ffffff;
-    margin-bottom: 7px;
+.anomaly-score {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
 }
 
-/* =========================
-   HISTORY
-========================= */
+.anomaly-message {
+    color: #aeb7ca;
+    line-height: 1.5;
+}
 
-.history-list {
-    max-height: 250px;
+/* History */
+.history {
+    max-height: 260px;
     overflow-y: auto;
 }
 
 .history-item {
     display: flex;
     justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid #203b58;
+    padding: 11px 0;
+    border-bottom: 1px solid #20283a;
     font-size: 13px;
 }
 
@@ -494,96 +373,51 @@ button:active {
     border-bottom: none;
 }
 
+.history-time {
+    color: #7f8aa0;
+}
+
 .history-risk {
-    font-weight: bold;
+    font-weight: 700;
 }
 
-/* =========================
-   TREND
-========================= */
-
-.trend-container {
-    width: 100%;
-    height: 230px;
-    position: relative;
-}
-
+/* Canvas */
 canvas {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
+    height: 240px;
+    background: #0b101c;
+    border-radius: 12px;
 }
 
-/* =========================
-   EXPLANATION
-========================= */
-
-.explanation {
-    color: #b7c6d8;
-    line-height: 1.7;
-    font-size: 14px;
+/* Footer */
+footer {
+    text-align: center;
+    color: #69758b;
+    padding: 30px 0 40px;
+    font-size: 13px;
 }
-
-.explanation strong {
-    color: #ffffff;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media (max-width: 800px) {
-
     .grid {
         grid-template-columns: 1fr;
     }
 
-    .status-card,
-    .recommendation-card {
-        grid-column: span 1;
+    .environment {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .gauge-wrapper {
-        transform: scale(0.92);
-        margin-top: 0;
-        margin-bottom: -5px;
+    header h1 {
+        font-size: 30px;
     }
 }
 
-@media (max-width: 550px) {
-
-    header h1 {
-        font-size: 26px;
+@media (max-width: 450px) {
+    .environment {
+        grid-template-columns: 1fr;
     }
 
     .card {
         padding: 18px;
-    }
-
-    .sensor-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .button-row {
-        grid-template-columns: 1fr;
-    }
-
-    .simulator-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .simulator-status {
-        align-self: flex-start;
-    }
-
-    .gauge-wrapper {
-        transform: scale(0.82);
-        margin-top: -8px;
-        margin-bottom: -15px;
-    }
-
-    .recommendation-title {
-        font-size: 18px;
     }
 }
 </style>
@@ -591,47 +425,33 @@ canvas {
 
 <body>
 
+<div class="container">
+
 <header>
     <h1>🌊 FloodGuard-X</h1>
     <p>Flood Risk Detection & Disaster Management System</p>
 </header>
 
-<div class="container">
-
 <div class="grid">
 
-<!-- CURRENT RISK -->
+    <!-- CURRENT RISK -->
+    <section class="card status-card">
+        <h2>Current Flood Risk</h2>
 
-<div class="card status-card">
+        <div id="riskLevel" class="risk-level low">LOW</div>
 
-    <h2>Current Flood Risk</h2>
-
-    <div id="riskLevel" class="risk-level">LOW</div>
-
-    <div id="riskMessage" class="risk-message">
-        Current conditions indicate a low flood risk.
-    </div>
-
-    <div class="gauge-section">
+        <div id="riskMessage" class="risk-message">
+            Current conditions indicate a low flood risk.
+        </div>
 
         <div class="gauge-wrapper">
-
             <div class="gauge"></div>
-
             <div id="gaugeNeedle" class="gauge-needle"></div>
 
             <div class="gauge-center">
-
-                <div id="gaugeNumber" class="gauge-number">
-                    0
-                </div>
-
-                <div class="gauge-label">
-                    FLOOD RISK INDEX
-                </div>
-
+                <div id="gaugeNumber" class="gauge-number">0</div>
+                <div class="gauge-label">FLOOD RISK INDEX</div>
             </div>
-
         </div>
 
         <div class="gauge-scale">
@@ -640,402 +460,367 @@ canvas {
             <span>70</span>
             <span>100</span>
         </div>
+    </section>
 
-    </div>
+    <!-- FRI -->
+    <section class="card">
+        <h2>Flood Risk Index</h2>
 
-    <div class="fri-section">
+        <div id="friValue" class="fri-value">0.00</div>
 
-        <div class="fri-header">
-            <span>Flood Risk Index</span>
-            <span id="friValue" class="fri-value">0.00 / 100</span>
+        <div class="progress">
+            <div id="friBar" class="progress-bar"></div>
         </div>
 
-        <div class="fri-bar">
-            <div id="friFill" class="fri-fill"></div>
-        </div>
+        <br>
 
-    </div>
+        <div class="explanation">
+            <strong>Model:</strong><br>
+            FRI = 0.40 × Rainfall + 0.40 × Water Level + 0.20 × Soil Moisture
+        </div>
+    </section>
 
 </div>
-
 
 <!-- SIMULATOR -->
+<section class="card">
+    <h2>🎛️ Flood Risk Simulator</h2>
 
-<div class="card simulator-card">
+    <label for="scenarioSelect">Select Scenario</label>
 
-    <div class="simulator-header">
-
-        <h2>🎛️ Flood Risk Simulator</h2>
-
-        <div class="simulator-status">
-
-            <span id="statusDot" class="status-dot"></span>
-
-            <span id="simulationStatus">
-                Ready
-            </span>
-
-        </div>
-
-    </div>
-
-    <label class="control-label">
-        Select simulation scenario
-    </label>
-
-    <select id="scenarioSelect"
-            onchange="updateScenarioDescription()">
-
-        <option value="random">
-            Random Scenario
-        </option>
-
-        <option value="normal">
-            Normal Conditions
-        </option>
-
-        <option value="heavy">
-            Heavy Rainfall
-        </option>
-
-        <option value="rising">
-            Rising Water Level
-        </option>
-
-        <option value="extreme">
-            Extreme Flood
-        </option>
-
+    <select id="scenarioSelect">
+        <option value="random">Random Scenario</option>
+        <option value="normal">Normal Conditions</option>
+        <option value="heavy">Heavy Rainfall</option>
+        <option value="rising">Rising Water Level</option>
+        <option value="extreme">Extreme Flood</option>
     </select>
 
-
-    <div id="scenarioDescription"
-         class="scenario-description">
-
-        Generates a random combination of environmental
-        conditions within the model's input range.
-
+    <div id="scenarioDescription" class="scenario-description">
+        Generates a random combination of environmental conditions within the model's input range.
     </div>
 
-
-    <div class="button-row">
-
-        <button onclick="runSimulation()">
-            ▶ Run Simulation
-        </button>
-
-        <button class="reset-btn"
-                onclick="resetSystem()">
-            ↺ Reset
-        </button>
-
+    <div class="simulation-status">
+        <span id="statusDot" class="status-dot"></span>
+        <span id="simulationStatus">Ready</span>
     </div>
 
-
-    <div id="simulationMessage"
-         class="simulation-message">
-
-        System ready for simulation.
-
+    <div id="simulationMessage" class="scenario-description">
+        Select a scenario and run the simulation.
     </div>
 
-</div>
+    <button class="primary" onclick="runSimulation()">
+        ▶ Run Simulation
+    </button>
 
+    <button class="reset" onclick="resetSystem()">
+        ↻ Reset System
+    </button>
+</section>
+
+<br>
 
 <!-- ENVIRONMENT -->
+<section class="card">
+    <h2>🌍 Environmental Conditions</h2>
 
-<div class="card">
+    <div class="environment">
 
-    <h2>🌧️ Environmental Conditions</h2>
-
-    <div class="sensor-grid">
-
-        <div class="sensor">
-            <div class="sensor-label">Rainfall</div>
-            <div id="rainfall" class="sensor-value">20 mm</div>
+        <div class="metric">
+            <div class="metric-title">🌧️ Rainfall</div>
+            <div id="rainfall" class="metric-value">20 mm</div>
         </div>
 
-        <div class="sensor">
-            <div class="sensor-label">Water Level</div>
-            <div id="waterLevel" class="sensor-value">1.2 m</div>
+        <div class="metric">
+            <div class="metric-title">🌊 Water Level</div>
+            <div id="waterLevel" class="metric-value">1.2 m</div>
         </div>
 
-        <div class="sensor">
-            <div class="sensor-label">Soil Moisture</div>
-            <div id="soilMoisture" class="sensor-value">40 %</div>
+        <div class="metric">
+            <div class="metric-title">🌱 Soil Moisture</div>
+            <div id="soilMoisture" class="metric-value">40%</div>
         </div>
 
-        <div class="sensor">
-            <div class="sensor-label">Temperature</div>
-            <div id="temperature" class="sensor-value">28 °C</div>
+        <div class="metric">
+            <div class="metric-title">🌡️ Temperature</div>
+            <div id="temperature" class="metric-value">28°C</div>
         </div>
 
     </div>
+</section>
 
-</div>
+<br>
 
+<div class="grid">
 
-<!-- CONTRIBUTIONS -->
+    <!-- CONTRIBUTIONS -->
+    <section class="card">
+        <h2>📊 FRI Contributions</h2>
 
-<div class="card">
-
-    <h2>📊 FRI Contributions</h2>
-
-    <div class="contribution">
-
-        <div class="contribution-top">
-            <span>Rainfall — 40%</span>
-            <span id="rainContribution">0.00</span>
-        </div>
-
-        <div class="contribution-bar">
-            <div id="rainContributionBar"
-                 class="contribution-fill"
-                 style="width:0%">
+        <div class="contribution">
+            <div class="contribution-head">
+                <span>Rainfall — 40%</span>
+                <span id="rainContribution">0.00</span>
+            </div>
+            <div class="contribution-bar">
+                <div id="rainContributionBar" class="contribution-fill"></div>
             </div>
         </div>
 
-    </div>
-
-    <div class="contribution">
-
-        <div class="contribution-top">
-            <span>Water Level — 40%</span>
-            <span id="waterContribution">0.00</span>
-        </div>
-
-        <div class="contribution-bar">
-            <div id="waterContributionBar"
-                 class="contribution-fill"
-                 style="width:0%">
+        <div class="contribution">
+            <div class="contribution-head">
+                <span>Water Level — 40%</span>
+                <span id="waterContribution">0.00</span>
+            </div>
+            <div class="contribution-bar">
+                <div id="waterContributionBar" class="contribution-fill"></div>
             </div>
         </div>
 
-    </div>
-
-    <div class="contribution">
-
-        <div class="contribution-top">
-            <span>Soil Moisture — 20%</span>
-            <span id="soilContribution">0.00</span>
-        </div>
-
-        <div class="contribution-bar">
-            <div id="soilContributionBar"
-                 class="contribution-fill"
-                 style="width:0%">
+        <div class="contribution">
+            <div class="contribution-head">
+                <span>Soil Moisture — 20%</span>
+                <span id="soilContribution">0.00</span>
+            </div>
+            <div class="contribution-bar">
+                <div id="soilContributionBar" class="contribution-fill"></div>
             </div>
         </div>
+    </section>
 
-    </div>
+    <!-- EXPLANATION -->
+    <section class="card">
+        <h2>🔎 Risk Explanation</h2>
 
-</div>
-
-
-<!-- EXPLANATION -->
-
-<div class="card">
-
-    <h2>🧠 Risk Explanation</h2>
-
-    <div id="riskExplanation" class="explanation">
-        Run a simulation to generate an explainable flood-risk assessment.
-    </div>
+        <div id="riskExplanation" class="explanation">
+            Run a simulation to generate an explanation of the current flood-risk condition.
+        </div>
+    </section>
 
 </div>
 
-
-<!-- RECOMMENDATION -->
-
-<div class="card recommendation-card">
-
+<!-- EMERGENCY -->
+<section class="card emergency">
     <h2>🚨 Emergency Recommendation</h2>
 
-    <div id="recommendationBox"
-         class="recommendation-box">
-
-        <div class="recommendation-status">
-
-            <div id="recommendationIcon"
-                 class="recommendation-icon">
-                🟢
-            </div>
-
-            <div>
-
-                <div id="recommendationTitle"
-                     class="recommendation-title">
-                    Monitoring Recommended
-                </div>
-
-                <div id="recommendationSubtitle"
-                     class="recommendation-subtitle">
-                    Current conditions are within the low-risk range.
-                </div>
-
-            </div>
-
-        </div>
-
-        <ul id="recommendationList"
-            class="recommendation-list">
-
-            <li>Continue routine environmental monitoring.</li>
-            <li>Monitor rainfall and water-level changes.</li>
-            <li>No immediate emergency action is indicated by this model.</li>
-
-        </ul>
-
-        <div class="recommendation-note">
-            Recommendations are generated from the model's simulated
-            risk classification and are intended for demonstration,
-            not real-world emergency decisions.
-        </div>
-
+    <div id="emergencyRecommendation" class="emergency-text">
+        Continue monitoring environmental conditions. No immediate emergency action is indicated by the current model state.
     </div>
+</section>
 
-</div>
-
+<br>
 
 <!-- ANOMALY -->
-
-<div class="card">
-
+<section class="card">
     <h2>⚠️ Anomaly Detection</h2>
 
     <div class="anomaly-box">
-
-        <div id="anomalyTitle" class="anomaly-title">
-            System Status: NORMAL
+        <div>
+            Anomaly Score:
+            <span id="anomalyScore" class="anomaly-score">0</span>
         </div>
 
-        <div id="anomalyMessage">
-            No abnormal environmental conditions detected.
+        <div id="anomalyMessage" class="anomaly-message">
+            No unusual environmental conditions detected.
         </div>
-
     </div>
+</section>
 
-</div>
-
+<br>
 
 <!-- HISTORY -->
-
-<div class="card">
-
+<section class="card">
     <h2>📜 Risk History</h2>
 
-    <div id="historyList" class="history-list">
-
+    <div id="history" class="history">
         <div class="history-item">
             <span>No simulation recorded yet.</span>
         </div>
-
     </div>
+</section>
 
-</div>
-
+<br>
 
 <!-- TREND -->
-
-<div class="card">
-
+<section class="card">
     <h2>📈 Risk Trend</h2>
 
-    <div class="trend-container">
+    <canvas id="riskChart" width="1000" height="240"></canvas>
+</section>
 
-        <canvas id="riskChart"></canvas>
-
-    </div>
+<footer>
+    FloodGuard-X • Lightweight • Explainable • Dataset-Free Flood Risk Modeling
+</footer>
 
 </div>
-
-</div>
-</div>
-
 
 <script>
+/* =========================
+   FLOODGUARD-X CORE MODEL
+   ========================= */
 
-let riskHistory = [];
+let historyData = [];
 
+/* Normalize inputs */
+function normalizeRainfall(value) {
+    return Math.min(100, Math.max(0, value / 150 * 100));
+}
+
+function normalizeWater(value) {
+    return Math.min(100, Math.max(0, value / 5 * 100));
+}
+
+function normalizeSoil(value) {
+    return Math.min(100, Math.max(0, value));
+}
+
+/* FRI calculation */
+function calculateRisk(rainfall, waterLevel, soilMoisture) {
+
+    const R = normalizeRainfall(rainfall);
+    const W = normalizeWater(waterLevel);
+    const S = normalizeSoil(soilMoisture);
+
+    const rainfallContribution = R * 0.40;
+    const waterContribution = W * 0.40;
+    const soilContribution = S * 0.20;
+
+    const fri =
+        rainfallContribution +
+        waterContribution +
+        soilContribution;
+
+    return {
+        fri: Math.max(0, Math.min(100, fri)),
+        rainfallContribution,
+        waterContribution,
+        soilContribution,
+        R,
+        W,
+        S
+    };
+}
+
+/* Classification */
+function classifyRisk(fri) {
+
+    if (fri >= 70) {
+        return {
+            level: "HIGH",
+            className: "high",
+            message: "Current environmental conditions indicate a high flood risk."
+        };
+    }
+
+    if (fri >= 40) {
+        return {
+            level: "MEDIUM",
+            className: "medium",
+            message: "Current environmental conditions indicate a moderate flood risk."
+        };
+    }
+
+    return {
+        level: "LOW",
+        className: "low",
+        message: "Current conditions indicate a low flood risk."
+    };
+}
 
 /* =========================
    SCENARIOS
-========================= */
+   ========================= */
 
 function generateScenario(type) {
 
     if (type === "normal") {
-
         return {
             rainfall: 20,
             waterLevel: 1.2,
             soilMoisture: 40,
             temperature: 28
         };
-
     }
 
     if (type === "heavy") {
-
         return {
             rainfall: 110,
             waterLevel: 2.2,
             soilMoisture: 75,
             temperature: 25
         };
-
     }
 
     if (type === "rising") {
-
         return {
             rainfall: 70,
             waterLevel: 3.5,
             soilMoisture: 85,
             temperature: 26
         };
-
     }
 
     if (type === "extreme") {
-
         return {
             rainfall: 140,
             waterLevel: 4.5,
             soilMoisture: 95,
             temperature: 24
         };
-
     }
 
     return {
-
         rainfall: Math.floor(Math.random() * 150),
-        waterLevel: Math.round(Math.random() * 500) / 100,
+        waterLevel: Math.random() * 5,
         soilMoisture: Math.floor(Math.random() * 100),
-        temperature: Math.floor(Math.random() * 20) + 20
-
+        temperature: 20 + Math.floor(Math.random() * 20)
     };
-
 }
 
+/* =========================
+   ANOMALY DETECTION
+   ========================= */
+
+function detectAnomaly(rainfall, waterLevel, soilMoisture) {
+
+    let score = 0;
+    let conditions = [];
+
+    if (rainfall >= 120) {
+        score += 40;
+        conditions.push("Extremely high rainfall detected.");
+    } else if (rainfall >= 90) {
+        score += 20;
+        conditions.push("Unusually high rainfall detected.");
+    }
+
+    if (waterLevel >= 4) {
+        score += 40;
+        conditions.push("Critical water level detected.");
+    } else if (waterLevel >= 3) {
+        score += 20;
+        conditions.push("Unusually high water level detected.");
+    }
+
+    if (soilMoisture >= 90) {
+        score += 20;
+        conditions.push("Extremely high soil moisture detected.");
+    }
+
+    return {
+        score,
+        anomaly: score >= 40,
+        conditions
+    };
+}
 
 /* =========================
    SCENARIO DESCRIPTION
-========================= */
+   ========================= */
 
 function updateScenarioDescription() {
 
-    const type =
-        document.getElementById(
-            "scenarioSelect"
-        ).value;
-
-    const description =
-        document.getElementById(
-            "scenarioDescription"
-        );
-
+    const type = document.getElementById("scenarioSelect").value;
 
     const descriptions = {
 
@@ -1053,421 +838,379 @@ function updateScenarioDescription() {
 
         extreme:
             "Represents a severe flood scenario with very high rainfall, water level, and soil moisture."
-
     };
 
-
-    description.textContent =
+    document.getElementById("scenarioDescription").textContent =
         descriptions[type];
-
 }
 
-
-/* =========================
-   RISK ENGINE
-========================= */
-
-function calculateRisk(
-    rainfall,
-    waterLevel,
-    soilMoisture
-) {
-
-    const R =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                rainfall / 150 * 100
-            )
-        );
-
-    const W =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                waterLevel / 5 * 100
-            )
-        );
-
-    const S =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                soilMoisture
-            )
-        );
-
-
-    const rainfallContribution =
-        R * 0.40;
-
-    const waterContribution =
-        W * 0.40;
-
-    const soilContribution =
-        S * 0.20;
-
-
-    const fri =
-        rainfallContribution +
-        waterContribution +
-        soilContribution;
-
-
-    let classification;
-
-
-    if (fri >= 70) {
-
-        classification = "HIGH";
-
-    } else if (fri >= 40) {
-
-        classification = "MEDIUM";
-
-    } else {
-
-        classification = "LOW";
-
-    }
-
-
-    return {
-
-        fri,
-        classification,
-        rainfallContribution,
-        waterContribution,
-        soilContribution
-
-    };
-
-}
-
-
-/* =========================
-   ANOMALY
-========================= */
-
-function detectAnomaly(
-    rainfall,
-    waterLevel,
-    soilMoisture
-) {
-
-    let score = 0;
-
-    let conditions = [];
-
-
-    if (rainfall >= 120) {
-
-        score += 40;
-
-        conditions.push(
-            "Extremely high rainfall detected."
-        );
-
-    } else if (rainfall >= 90) {
-
-        score += 20;
-
-        conditions.push(
-            "Unusually high rainfall detected."
-        );
-
-    }
-
-
-    if (waterLevel >= 4) {
-
-        score += 40;
-
-        conditions.push(
-            "Critical water level detected."
-        );
-
-    } else if (waterLevel >= 3) {
-
-        score += 20;
-
-        conditions.push(
-            "Unusually high water level detected."
-        );
-
-    }
-
-
-    if (soilMoisture >= 90) {
-
-        score += 20;
-
-        conditions.push(
-            "Extremely high soil moisture detected."
-        );
-
-    }
-
-
-    return {
-
-        score,
-        anomaly: score >= 40,
-        conditions
-
-    };
-
-}
-
-
-/* =========================
-   GAUGE
-========================= */
-
-function updateGauge(fri) {
-
-    const safeFRI =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                fri
-            )
-        );
-
-
-    document.getElementById(
-        "gaugeNumber"
-    ).textContent =
-        safeFRI.toFixed(0);
-
-
-    const rotation =
-        -90 + (safeFRI * 1.8);
-
-
-    document.getElementById(
-        "gaugeNeedle"
-    ).style.transform =
-        "rotate(" +
-        rotation +
-        "deg)";
-
-}
-
-
-/* =========================
-   RISK COLOR
-========================= */
-
-function updateRiskColor(
-    classification
-) {
-
-    const riskLevel =
-        document.getElementById(
-            "riskLevel"
-        );
-
-    const friFill =
-        document.getElementById(
-            "friFill"
-        );
-
-
-    if (classification === "HIGH") {
-
-        riskLevel.style.color =
-            "#ff5c5c";
-
-        friFill.style.background =
-            "#ff5c5c";
-
-    } else if (
-        classification === "MEDIUM"
-    ) {
-
-        riskLevel.style.color =
-            "#ffc857";
-
-        friFill.style.background =
-            "#ffc857";
-
-    } else {
-
-        riskLevel.style.color =
-            "#27c9a5";
-
-        friFill.style.background =
-            "#27c9a5";
-
-    }
-
-}
-
-
-/* =========================
-   RECOMMENDATIONS
-========================= */
-
-function updateRecommendations(
-    classification,
-    anomaly
-) {
-
-    const icon =
-        document.getElementById(
-            "recommendationIcon"
-        );
-
-    const title =
-        document.getElementById(
-            "recommendationTitle"
-        );
-
-    const subtitle =
-        document.getElementById(
-            "recommendationSubtitle"
-        );
-
-    const list =
-        document.getElementById(
-            "recommendationList"
-        );
-
-
-    if (classification === "HIGH") {
-
-        icon.textContent = "🔴";
-
-        title.textContent =
-            "High Risk — Immediate Attention";
-
-        subtitle.textContent =
-            "Environmental conditions indicate a high modelled flood-risk level.";
-
-        list.innerHTML =
-
-            "<li>Increase monitoring of rainfall and water-level conditions.</li>" +
-
-            "<li>Check local flood warnings and official emergency information.</li>" +
-
-            "<li>Prepare emergency supplies and important documents.</li>" +
-
-            "<li>Follow instructions from local authorities if an evacuation order is issued.</li>";
-
-    } else if (
-        classification === "MEDIUM"
-    ) {
-
-        icon.textContent = "🟡";
-
-        title.textContent =
-            "Moderate Risk — Prepare and Monitor";
-
-        subtitle.textContent =
-            "Conditions indicate an elevated modelled flood-risk level.";
-
-        list.innerHTML =
-
-            "<li>Increase monitoring of environmental conditions.</li>" +
-
-            "<li>Watch for rising rainfall or water levels.</li>" +
-
-            "<li>Review local flood warnings and emergency information.</li>" +
-
-            "<li>Keep basic emergency supplies accessible.</li>";
-
-    } else {
-
-        icon.textContent = "🟢";
-
-        title.textContent =
-            "Low Risk — Continue Monitoring";
-
-        subtitle.textContent =
-            "Current conditions are within the low-risk range.";
-
-        list.innerHTML =
-
-            "<li>Continue routine environmental monitoring.</li>" +
-
-            "<li>Monitor rainfall and water-level changes.</li>" +
-
-            "<li>Stay aware of official weather and local alerts.</li>" +
-
-            "<li>No immediate emergency action is indicated by this model.</li>";
-
-    }
-
-
-    if (
-        anomaly &&
-        anomaly.anomaly
-    ) {
-
-        list.innerHTML +=
-            "<li><strong>Anomaly detected:</strong> review abnormal environmental conditions.</li>";
-
-    }
-
-}
-
+document.getElementById("scenarioSelect")
+    .addEventListener("change", updateScenarioDescription);
 
 /* =========================
    SIMULATION STATUS
-========================= */
+   ========================= */
 
-function setSimulationStatus(
-    active,
-    message
-) {
+function setSimulationStatus(active, message) {
 
-    const dot =
-        document.getElementById(
-            "statusDot"
-        );
-
-    const status =
-        document.getElementById(
-            "simulationStatus"
-        );
-
-    const messageBox =
-        document.getElementById(
-            "simulationMessage"
-        );
-
+    const dot = document.getElementById("statusDot");
+    const status = document.getElementById("simulationStatus");
+    const messageBox = document.getElementById("simulationMessage");
 
     if (active) {
-
         dot.classList.add("active");
+        status.textContent = "Simulation Active";
+    } else {
+        dot.classList.remove("active");
+        status.textContent = "Ready";
+    }
 
-        status.textContent =
-            "Simulation Active";
+    messageBox.textContent = message;
+}
+
+/* =========================
+   UPDATE GAUGE
+   ========================= */
+
+function updateGauge(fri) {
+
+    const number = document.getElementById("gaugeNumber");
+    const needle = document.getElementById("gaugeNeedle");
+
+    number.textContent = fri.toFixed(2);
+
+    /*
+       -90 degrees = 0
+        0 degrees = 50
+       +90 degrees = 100
+    */
+    const angle = -90 + (fri / 100) * 180;
+
+    needle.style.transform =
+        "rotate(" + angle + "deg)";
+}
+
+/* =========================
+   UPDATE UI
+   ========================= */
+
+function updateUI(scenario, result, risk, anomaly) {
+
+    document.getElementById("rainfall").textContent =
+        scenario.rainfall.toFixed(1) + " mm";
+
+    document.getElementById("waterLevel").textContent =
+        scenario.waterLevel.toFixed(2) + " m";
+
+    document.getElementById("soilMoisture").textContent =
+        scenario.soilMoisture.toFixed(1) + "%";
+
+    document.getElementById("temperature").textContent =
+        scenario.temperature + "°C";
+
+    document.getElementById("friValue").textContent =
+        result.fri.toFixed(2);
+
+    const bar = document.getElementById("friBar");
+
+    bar.style.width = result.fri + "%";
+
+    bar.style.background =
+        risk.level === "HIGH"
+            ? "#f87171"
+            : risk.level === "MEDIUM"
+                ? "#facc15"
+                : "#4ade80";
+
+    const riskLevel = document.getElementById("riskLevel");
+
+    riskLevel.textContent = risk.level;
+    riskLevel.className = "risk-level " + risk.className;
+
+    document.getElementById("riskMessage").textContent =
+        risk.message;
+
+    updateGauge(result.fri);
+
+    /* Contributions */
+
+    document.getElementById("rainContribution").textContent =
+        result.rainfallContribution.toFixed(2);
+
+    document.getElementById("waterContribution").textContent =
+        result.waterContribution.toFixed(2);
+
+    document.getElementById("soilContribution").textContent =
+        result.soilContribution.toFixed(2);
+
+    document.getElementById("rainContributionBar").style.width =
+        result.rainfallContribution + "%";
+
+    document.getElementById("waterContributionBar").style.width =
+        result.waterContribution + "%";
+
+    document.getElementById("soilContributionBar").style.width =
+        result.soilContribution + "%";
+
+    /* Explanation */
+
+    document.getElementById("riskExplanation").innerHTML =
+        "<strong>Rainfall:</strong> contributes " +
+        result.rainfallContribution.toFixed(2) +
+        " points.<br><br>" +
+
+        "<strong>Water Level:</strong> contributes " +
+        result.waterContribution.toFixed(2) +
+        " points.<br><br>" +
+
+        "<strong>Soil Moisture:</strong> contributes " +
+        result.soilContribution.toFixed(2) +
+        " points.<br><br>" +
+
+        "<strong>Final FRI:</strong> " +
+        result.fri.toFixed(2) +
+        " → " +
+        risk.level;
+
+    /* Emergency recommendation */
+
+    let recommendation;
+
+    if (risk.level === "HIGH") {
+
+        recommendation =
+            "High-risk conditions detected by the model. " +
+            "Increase monitoring frequency, verify local environmental conditions, " +
+            "and follow appropriate local emergency-management guidance.";
+
+    } else if (risk.level === "MEDIUM") {
+
+        recommendation =
+            "Moderate-risk conditions detected. Continue monitoring rainfall, " +
+            "water level, and soil moisture for further changes.";
 
     } else {
 
-        dot.classList.remove("active");
-
-        status.textContent =
-            "Ready";
-
+        recommendation =
+            "Current model conditions indicate low risk. " +
+            "Continue routine monitoring for environmental changes.";
     }
 
+    document.getElementById("emergencyRecommendation").textContent =
+        recommendation;
 
-    messageBox.textContent =
-        message;
+    /* Anomaly */
 
+    document.getElementById("anomalyScore").textContent =
+        anomaly.score;
+
+    if (anomaly.anomaly) {
+
+        document.getElementById("anomalyMessage").innerHTML =
+            "<strong>ANOMALY DETECTED</strong><br>" +
+            anomaly.conditions.join("<br>");
+
+    } else {
+
+        document.getElementById("anomalyMessage").innerHTML =
+            anomaly.conditions.length
+                ? anomaly.conditions.join("<br>") +
+                  "<br><br>No anomaly threshold reached."
+                : "No unusual environmental conditions detected.";
+    }
 }
 
+/* =========================
+   HISTORY
+   ========================= */
+
+function addHistory(scenario, result, risk) {
+
+    historyData.push({
+        time: new Date().toLocaleTimeString(),
+        fri: result.fri,
+        level: risk.level,
+        rainfall: scenario.rainfall,
+        water: scenario.waterLevel,
+        soil: scenario.soilMoisture
+    });
+
+    renderHistory();
+    drawChart();
+}
+
+function renderHistory() {
+
+    const history = document.getElementById("history");
+
+    if (historyData.length === 0) {
+
+        history.innerHTML =
+            '<div class="history-item">' +
+            '<span>No simulation recorded yet.</span>' +
+            '</div>';
+
+        return;
+    }
+
+    history.innerHTML = "";
+
+    [...historyData].reverse().forEach(item => {
+
+        const row = document.createElement("div");
+
+        row.className = "history-item";
+
+        const riskClass =
+            item.level === "HIGH"
+                ? "high"
+                : item.level === "MEDIUM"
+                    ? "medium"
+                    : "low";
+
+        row.innerHTML =
+            "<span>" +
+            item.time +
+            " — FRI " +
+            item.fri.toFixed(2) +
+            "</span>" +
+
+            '<span class="history-risk ' +
+            riskClass +
+            '">' +
+            item.level +
+            "</span>";
+
+        history.appendChild(row);
+    });
+}
 
 /* =========================
-   SIMULATION
-========================= */
+   RISK TREND
+   ========================= */
+
+function drawChart() {
+
+    const canvas = document.getElementById("riskChart");
+    const ctx = canvas.getContext("2d");
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    /* Background */
+    ctx.fillStyle = "#0b101c";
+    ctx.fillRect(0, 0, width, height);
+
+    if (historyData.length === 0) {
+
+        ctx.fillStyle = "#69758b";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            "Run simulations to display the risk trend.",
+            width / 2,
+            height / 2
+        );
+
+        return;
+    }
+
+    const padding = 45;
+    const chartWidth = width - padding * 2;
+    const chartHeight = height - padding * 2;
+
+    /* Grid */
+
+    ctx.strokeStyle = "#20283a";
+    ctx.lineWidth = 1;
+
+    [0, 40, 70, 100].forEach(value => {
+
+        const y =
+            height -
+            padding -
+            (value / 100) * chartHeight;
+
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - padding, y);
+        ctx.stroke();
+
+        ctx.fillStyle = "#69758b";
+        ctx.font = "11px Arial";
+        ctx.textAlign = "right";
+
+        ctx.fillText(
+            value,
+            padding - 8,
+            y + 4
+        );
+    });
+
+    /* Line */
+
+    ctx.strokeStyle = "#8b6cff";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    historyData.forEach((item, index) => {
+
+        const x =
+            padding +
+            (historyData.length === 1
+                ? chartWidth / 2
+                : (index / (historyData.length - 1)) * chartWidth);
+
+        const y =
+            height -
+            padding -
+            (item.fri / 100) * chartHeight;
+
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+
+    ctx.stroke();
+
+    /* Points */
+
+    historyData.forEach((item, index) => {
+
+        const x =
+            padding +
+            (historyData.length === 1
+                ? chartWidth / 2
+                : (index / (historyData.length - 1)) * chartWidth);
+
+        const y =
+            height -
+            padding -
+            (item.fri / 100) * chartHeight;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+
+        ctx.fillStyle =
+            item.level === "HIGH"
+                ? "#f87171"
+                : item.level === "MEDIUM"
+                    ? "#facc15"
+                    : "#4ade80";
+
+        ctx.fill();
+    });
+}
+
+/* =========================
+   RUN SIMULATION
+   ========================= */
 
 function runSimulation() {
 
@@ -1476,777 +1219,131 @@ function runSimulation() {
         "Running simulation..."
     );
 
-
-    const selectedScenario =
-        document.getElementById(
-            "scenarioSelect"
-        ).value;
-
+    const type =
+        document.getElementById("scenarioSelect").value;
 
     const scenario =
-        generateScenario(
-            selectedScenario
-        );
-
-
-    const rainfall =
-        scenario.rainfall;
-
-    const waterLevel =
-        scenario.waterLevel;
-
-    const soilMoisture =
-        scenario.soilMoisture;
-
-    const temperature =
-        scenario.temperature;
-
-
-    document.getElementById(
-        "rainfall"
-    ).textContent =
-        rainfall.toFixed(1) +
-        " mm";
-
-
-    document.getElementById(
-        "waterLevel"
-    ).textContent =
-        waterLevel.toFixed(2) +
-        " m";
-
-
-    document.getElementById(
-        "soilMoisture"
-    ).textContent =
-        soilMoisture.toFixed(1) +
-        " %";
-
-
-    document.getElementById(
-        "temperature"
-    ).textContent =
-        temperature.toFixed(1) +
-        " °C";
-
+        generateScenario(type);
 
     const result =
         calculateRisk(
-            rainfall,
-            waterLevel,
-            soilMoisture
+            scenario.rainfall,
+            scenario.waterLevel,
+            scenario.soilMoisture
         );
 
-
-    document.getElementById(
-        "riskLevel"
-    ).textContent =
-        result.classification;
-
-
-    if (
-        result.classification === "HIGH"
-    ) {
-
-        document.getElementById(
-            "riskMessage"
-        ).textContent =
-            "Current conditions indicate a high flood risk.";
-
-    } else if (
-        result.classification === "MEDIUM"
-    ) {
-
-        document.getElementById(
-            "riskMessage"
-        ).textContent =
-            "Current conditions indicate a moderate flood risk.";
-
-    } else {
-
-        document.getElementById(
-            "riskMessage"
-        ).textContent =
-            "Current conditions indicate a low flood risk.";
-
-    }
-
-
-    document.getElementById(
-        "friValue"
-    ).textContent =
-        result.fri.toFixed(2) +
-        " / 100";
-
-
-    document.getElementById(
-        "friFill"
-    ).style.width =
-        result.fri + "%";
-
-
-    updateGauge(
-        result.fri
-    );
-
-
-    updateRiskColor(
-        result.classification
-    );
-
-
-    /* Contributions */
-
-    document.getElementById(
-        "rainContribution"
-    ).textContent =
-        result.rainfallContribution.toFixed(2);
-
-
-    document.getElementById(
-        "waterContribution"
-    ).textContent =
-        result.waterContribution.toFixed(2);
-
-
-    document.getElementById(
-        "soilContribution"
-    ).textContent =
-        result.soilContribution.toFixed(2);
-
-
-    document.getElementById(
-        "rainContributionBar"
-    ).style.width =
-        result.rainfallContribution +
-        "%";
-
-
-    document.getElementById(
-        "waterContributionBar"
-    ).style.width =
-        result.waterContribution +
-        "%";
-
-
-    document.getElementById(
-        "soilContributionBar"
-    ).style.width =
-        result.soilContribution +
-        "%";
-
-
-    /* Explanation */
-
-    document.getElementById(
-        "riskExplanation"
-    ).innerHTML =
-
-        "<strong>Rainfall:</strong> " +
-        result.rainfallContribution.toFixed(2) +
-        " points<br>" +
-
-        "<strong>Water Level:</strong> " +
-        result.waterContribution.toFixed(2) +
-        " points<br>" +
-
-        "<strong>Soil Moisture:</strong> " +
-        result.soilContribution.toFixed(2) +
-        " points<br><br>" +
-
-        "<strong>FRI:</strong> " +
-        result.fri.toFixed(2) +
-        " / 100<br>" +
-
-        "<strong>Classification:</strong> " +
-        result.classification;
-
-
-    /* Anomaly */
+    const risk =
+        classifyRisk(result.fri);
 
     const anomaly =
         detectAnomaly(
-            rainfall,
-            waterLevel,
-            soilMoisture
+            scenario.rainfall,
+            scenario.waterLevel,
+            scenario.soilMoisture
         );
 
-
-    const anomalyTitle =
-        document.getElementById(
-            "anomalyTitle"
-        );
-
-    const anomalyMessage =
-        document.getElementById(
-            "anomalyMessage"
-        );
-
-
-    if (
-        anomaly.anomaly
-    ) {
-
-        anomalyTitle.textContent =
-            "System Status: ANOMALY DETECTED";
-
-
-        anomalyMessage.textContent =
-            anomaly.conditions.join(" ") +
-            " Anomaly score: " +
-            anomaly.score;
-
-    } else {
-
-        anomalyTitle.textContent =
-            "System Status: NORMAL";
-
-
-        if (
-            anomaly.conditions.length > 0
-        ) {
-
-            anomalyMessage.textContent =
-                anomaly.conditions.join(" ") +
-                " Anomaly score: " +
-                anomaly.score;
-
-        } else {
-
-            anomalyMessage.textContent =
-                "No abnormal environmental conditions detected.";
-
-        }
-
-    }
-
-
-    /* Recommendation */
-
-    updateRecommendations(
-        result.classification,
+    updateUI(
+        scenario,
+        result,
+        risk,
         anomaly
     );
 
-
-    /* History */
-
-    riskHistory.push({
-
-        scenario:
-            selectedScenario,
-
-        fri:
-            result.fri,
-
-        classification:
-            result.classification
-
-    });
-
-
-    updateHistory();
-
-    drawTrend();
-
+    addHistory(
+        scenario,
+        result,
+        risk
+    );
 
     setSimulationStatus(
         true,
         "Simulation completed successfully."
     );
-
 }
-
-
-/* =========================
-   HISTORY
-========================= */
-
-function updateHistory() {
-
-    const list =
-        document.getElementById(
-            "historyList"
-        );
-
-
-    if (
-        riskHistory.length === 0
-    ) {
-
-        list.innerHTML =
-            '<div class="history-item">' +
-            '<span>No simulation recorded yet.</span>' +
-            '</div>';
-
-        return;
-
-    }
-
-
-    list.innerHTML = "";
-
-
-    riskHistory
-        .slice()
-        .reverse()
-        .forEach(
-            function(item) {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.className =
-                    "history-item";
-
-
-                div.innerHTML =
-
-                    "<span>" +
-                    item.scenario.toUpperCase() +
-                    "</span>" +
-
-                    "<span>" +
-                    item.fri.toFixed(2) +
-                    " — " +
-
-                    "<span class='history-risk'>" +
-                    item.classification +
-                    "</span>" +
-
-                    "</span>";
-
-
-                list.appendChild(
-                    div
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================
-   TREND
-========================= */
-
-function drawTrend() {
-
-    const canvas =
-        document.getElementById(
-            "riskChart"
-        );
-
-
-    const ctx =
-        canvas.getContext("2d");
-
-
-    const width =
-        canvas.clientWidth;
-
-
-    const height =
-        canvas.clientHeight;
-
-
-    const ratio =
-        window.devicePixelRatio || 1;
-
-
-    canvas.width =
-        width * ratio;
-
-
-    canvas.height =
-        height * ratio;
-
-
-    ctx.scale(
-        ratio,
-        ratio
-    );
-
-
-    ctx.clearRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    if (
-        riskHistory.length === 0
-    ) {
-
-        ctx.fillStyle =
-            "#91a6c0";
-
-        ctx.font =
-            "14px Arial";
-
-        ctx.textAlign =
-            "center";
-
-
-        ctx.fillText(
-            "No simulation data available",
-            width / 2,
-            height / 2
-        );
-
-
-        return;
-
-    }
-
-
-    const padding = 30;
-
-
-    const graphWidth =
-        width -
-        padding * 2;
-
-
-    const graphHeight =
-        height -
-        padding * 2;
-
-
-    ctx.strokeStyle =
-        "#203b58";
-
-    ctx.lineWidth = 1;
-
-
-    [0,25,50,75,100]
-        .forEach(
-            function(value) {
-
-                const y =
-                    padding +
-                    graphHeight -
-                    (value / 100) *
-                    graphHeight;
-
-
-                ctx.beginPath();
-
-                ctx.moveTo(
-                    padding,
-                    y
-                );
-
-                ctx.lineTo(
-                    width - padding,
-                    y
-                );
-
-                ctx.stroke();
-
-            }
-        );
-
-
-    ctx.fillStyle =
-        "#91a6c0";
-
-    ctx.font =
-        "11px Arial";
-
-    ctx.textAlign =
-        "right";
-
-
-    [0,25,50,75,100]
-        .forEach(
-            function(value) {
-
-                const y =
-                    padding +
-                    graphHeight -
-                    (value / 100) *
-                    graphHeight;
-
-
-                ctx.fillText(
-                    value,
-                    padding - 7,
-                    y + 4
-                );
-
-            }
-        );
-
-
-    ctx.strokeStyle =
-        "#247cff";
-
-    ctx.lineWidth = 3;
-
-    ctx.beginPath();
-
-
-    riskHistory.forEach(
-        function(item, index) {
-
-            const x =
-                padding +
-                (
-                    riskHistory.length === 1
-                    ? graphWidth / 2
-                    : index /
-                      (riskHistory.length - 1) *
-                      graphWidth
-                );
-
-
-            const y =
-                padding +
-                graphHeight -
-                (
-                    item.fri / 100
-                ) *
-                graphHeight;
-
-
-            if (
-                index === 0
-            ) {
-
-                ctx.moveTo(
-                    x,
-                    y
-                );
-
-            } else {
-
-                ctx.lineTo(
-                    x,
-                    y
-                );
-
-            }
-
-        }
-    );
-
-
-    ctx.stroke();
-
-
-    ctx.fillStyle =
-        "#ffffff";
-
-
-    riskHistory.forEach(
-        function(item, index) {
-
-            const x =
-                padding +
-                (
-                    riskHistory.length === 1
-                    ? graphWidth / 2
-                    : index /
-                      (riskHistory.length - 1) *
-                      graphWidth
-                );
-
-
-            const y =
-                padding +
-                graphHeight -
-                (
-                    item.fri / 100
-                ) *
-                graphHeight;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x,
-                y,
-                4,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-        }
-    );
-
-}
-
 
 /* =========================
    RESET
-========================= */
+   ========================= */
 
 function resetSystem() {
 
-    riskHistory = [];
+    historyData = [];
 
-
-    document.getElementById(
-        "riskLevel"
-    ).textContent =
-        "LOW";
-
-
-    document.getElementById(
-        "riskMessage"
-    ).textContent =
-        "Current conditions indicate a low flood risk.";
-
-
-    document.getElementById(
-        "rainfall"
-    ).textContent =
+    document.getElementById("rainfall").textContent =
         "20 mm";
 
-
-    document.getElementById(
-        "waterLevel"
-    ).textContent =
+    document.getElementById("waterLevel").textContent =
         "1.2 m";
 
+    document.getElementById("soilMoisture").textContent =
+        "40%";
 
-    document.getElementById(
-        "soilMoisture"
-    ).textContent =
-        "40 %";
+    document.getElementById("temperature").textContent =
+        "28°C";
 
-
-    document.getElementById(
-        "temperature"
-    ).textContent =
-        "28 °C";
-
-
-    document.getElementById(
-        "friValue"
-    ).textContent =
-        "0.00 / 100";
-
-
-    document.getElementById(
-        "friFill"
-    ).style.width =
-        "0%";
-
-
-    document.getElementById(
-        "rainContribution"
-    ).textContent =
+    document.getElementById("friValue").textContent =
         "0.00";
 
+    document.getElementById("friBar").style.width =
+        "0%";
 
-    document.getElementById(
-        "waterContribution"
-    ).textContent =
+    document.getElementById("riskLevel").textContent =
+        "LOW";
+
+    document.getElementById("riskLevel").className =
+        "risk-level low";
+
+    document.getElementById("riskMessage").textContent =
+        "Current conditions indicate a low flood risk.";
+
+    document.getElementById("gaugeNumber").textContent =
+        "0";
+
+    document.getElementById("gaugeNeedle").style.transform =
+        "rotate(-90deg)";
+
+    document.getElementById("rainContribution").textContent =
         "0.00";
 
-
-    document.getElementById(
-        "soilContribution"
-    ).textContent =
+    document.getElementById("waterContribution").textContent =
         "0.00";
 
+    document.getElementById("soilContribution").textContent =
+        "0.00";
 
-    document.getElementById(
-        "rainContributionBar"
-    ).style.width =
+    document.getElementById("rainContributionBar").style.width =
         "0%";
 
-
-    document.getElementById(
-        "waterContributionBar"
-    ).style.width =
+    document.getElementById("waterContributionBar").style.width =
         "0%";
 
-
-    document.getElementById(
-        "soilContributionBar"
-    ).style.width =
+    document.getElementById("soilContributionBar").style.width =
         "0%";
 
+    document.getElementById("riskExplanation").textContent =
+        "Run a simulation to generate an explanation of the current flood-risk condition.";
 
-    document.getElementById(
-        "riskExplanation"
-    ).innerHTML =
-        "Run a simulation to generate an explainable flood-risk assessment.";
+    document.getElementById("emergencyRecommendation").textContent =
+        "Continue monitoring environmental conditions. No immediate emergency action is indicated by the current model state.";
 
+    document.getElementById("anomalyScore").textContent =
+        "0";
 
-    document.getElementById(
-        "anomalyTitle"
-    ).textContent =
-        "System Status: NORMAL";
+    document.getElementById("anomalyMessage").textContent =
+        "No unusual environmental conditions detected.";
 
-
-    document.getElementById(
-        "anomalyMessage"
-    ).textContent =
-        "No abnormal environmental conditions detected.";
-
-
-    document.getElementById(
-        "scenarioSelect"
-    ).value =
-        "random";
-
-
-    updateScenarioDescription();
-
-
-    updateRecommendations(
-        "LOW",
-        {
-            anomaly: false
-        }
-    );
-
-
-    updateGauge(0);
-
-    updateRiskColor("LOW");
-
-    updateHistory();
-
-    drawTrend();
-
+    renderHistory();
+    drawChart();
 
     setSimulationStatus(
         false,
         "System reset. Ready for simulation."
     );
-
 }
 
-
-/* =========================
-   INITIALIZE
-========================= */
-
-window.addEventListener(
-    "resize",
-    drawTrend
-);
-
-
+/* Initial state */
 updateScenarioDescription();
-
-updateGauge(0);
-
-drawTrend();
-
+drawChart();
 </script>
 
 </body>

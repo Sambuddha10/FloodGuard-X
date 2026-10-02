@@ -227,18 +227,85 @@ header p {
 }
 
 /* =========================
-   SIMULATOR
+   SIMULATION CONTROLS
 ========================= */
+
+.simulator-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.simulator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.simulator-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #091727;
+    border: 1px solid #203b58;
+    color: #91a6c0;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #91a6c0;
+}
+
+.status-dot.active {
+    background: #27c9a5;
+    box-shadow: 0 0 8px rgba(39,201,165,0.7);
+}
+
+.control-label {
+    display: block;
+    color: #91a6c0;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
 
 select {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     border-radius: 9px;
     border: 1px solid #29435f;
     background: #091727;
     color: #ffffff;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     font-size: 14px;
+    outline: none;
+}
+
+select:focus {
+    border-color: #247cff;
+}
+
+.scenario-description {
+    min-height: 42px;
+    padding: 11px 13px;
+    margin-bottom: 14px;
+    border-radius: 9px;
+    background: #091727;
+    border: 1px solid #203b58;
+    color: #91a6c0;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 button {
@@ -248,18 +315,31 @@ button {
     border-radius: 9px;
     background: #247cff;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s ease;
 }
 
 button:hover {
     opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 .reset-btn {
-    margin-top: 10px;
     background: #203b58;
+}
+
+.simulation-message {
+    margin-top: 12px;
+    text-align: center;
+    color: #91a6c0;
+    font-size: 11px;
+    min-height: 15px;
 }
 
 /* =========================
@@ -319,7 +399,7 @@ button:hover {
 }
 
 /* =========================
-   RECOMMENDATION PANEL
+   RECOMMENDATION
 ========================= */
 
 .recommendation-card {
@@ -331,7 +411,6 @@ button:hover {
     padding: 20px;
     background: #091727;
     border: 1px solid #203b58;
-    transition: 0.4s ease;
 }
 
 .recommendation-status {
@@ -470,7 +549,7 @@ canvas {
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 550px) {
 
     header h1 {
         font-size: 26px;
@@ -482,6 +561,19 @@ canvas {
 
     .sensor-grid {
         grid-template-columns: 1fr;
+    }
+
+    .button-row {
+        grid-template-columns: 1fr;
+    }
+
+    .simulator-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .simulator-status {
+        align-self: flex-start;
     }
 
     .gauge-wrapper {
@@ -569,11 +661,30 @@ canvas {
 
 <!-- SIMULATOR -->
 
-<div class="card">
+<div class="card simulator-card">
 
-    <h2>🎛️ Flood Risk Simulator</h2>
+    <div class="simulator-header">
 
-    <select id="scenarioSelect">
+        <h2>🎛️ Flood Risk Simulator</h2>
+
+        <div class="simulator-status">
+
+            <span id="statusDot" class="status-dot"></span>
+
+            <span id="simulationStatus">
+                Ready
+            </span>
+
+        </div>
+
+    </div>
+
+    <label class="control-label">
+        Select simulation scenario
+    </label>
+
+    <select id="scenarioSelect"
+            onchange="updateScenarioDescription()">
 
         <option value="random">
             Random Scenario
@@ -597,13 +708,36 @@ canvas {
 
     </select>
 
-    <button onclick="runSimulation()">
-        Run Simulation
-    </button>
 
-    <button class="reset-btn" onclick="resetSystem()">
-        Reset System
-    </button>
+    <div id="scenarioDescription"
+         class="scenario-description">
+
+        Generates a random combination of environmental
+        conditions within the model's input range.
+
+    </div>
+
+
+    <div class="button-row">
+
+        <button onclick="runSimulation()">
+            ▶ Run Simulation
+        </button>
+
+        <button class="reset-btn"
+                onclick="resetSystem()">
+            ↺ Reset
+        </button>
+
+    </div>
+
+
+    <div id="simulationMessage"
+         class="simulation-message">
+
+        System ready for simulation.
+
+    </div>
 
 </div>
 
@@ -711,13 +845,14 @@ canvas {
 </div>
 
 
-<!-- EMERGENCY RECOMMENDATION -->
+<!-- RECOMMENDATION -->
 
 <div class="card recommendation-card">
 
     <h2>🚨 Emergency Recommendation</h2>
 
-    <div id="recommendationBox" class="recommendation-box">
+    <div id="recommendationBox"
+         class="recommendation-box">
 
         <div class="recommendation-status">
 
@@ -747,7 +882,7 @@ canvas {
 
             <li>Continue routine environmental monitoring.</li>
             <li>Monitor rainfall and water-level changes.</li>
-            <li>No immediate emergency action is indicated by the model.</li>
+            <li>No immediate emergency action is indicated by this model.</li>
 
         </ul>
 
@@ -886,6 +1021,49 @@ function generateScenario(type) {
 
 
 /* =========================
+   SCENARIO DESCRIPTION
+========================= */
+
+function updateScenarioDescription() {
+
+    const type =
+        document.getElementById(
+            "scenarioSelect"
+        ).value;
+
+    const description =
+        document.getElementById(
+            "scenarioDescription"
+        );
+
+
+    const descriptions = {
+
+        random:
+            "Generates a random combination of environmental conditions within the model's input range.",
+
+        normal:
+            "Represents relatively stable environmental conditions with low rainfall, water level, and soil moisture.",
+
+        heavy:
+            "Represents elevated rainfall with increased water level and soil moisture.",
+
+        rising:
+            "Represents a rising water-level condition combined with elevated soil moisture.",
+
+        extreme:
+            "Represents a severe flood scenario with very high rainfall, water level, and soil moisture."
+
+    };
+
+
+    description.textContent =
+        descriptions[type];
+
+}
+
+
+/* =========================
    RISK ENGINE
 ========================= */
 
@@ -922,6 +1100,7 @@ function calculateRisk(
             )
         );
 
+
     const rainfallContribution =
         R * 0.40;
 
@@ -931,12 +1110,15 @@ function calculateRisk(
     const soilContribution =
         S * 0.20;
 
+
     const fri =
         rainfallContribution +
         waterContribution +
         soilContribution;
 
+
     let classification;
+
 
     if (fri >= 70) {
 
@@ -952,12 +1134,15 @@ function calculateRisk(
 
     }
 
+
     return {
+
         fri,
         classification,
         rainfallContribution,
         waterContribution,
         soilContribution
+
     };
 
 }
@@ -974,7 +1159,9 @@ function detectAnomaly(
 ) {
 
     let score = 0;
+
     let conditions = [];
+
 
     if (rainfall >= 120) {
 
@@ -994,6 +1181,7 @@ function detectAnomaly(
 
     }
 
+
     if (waterLevel >= 4) {
 
         score += 40;
@@ -1012,6 +1200,7 @@ function detectAnomaly(
 
     }
 
+
     if (soilMoisture >= 90) {
 
         score += 20;
@@ -1022,10 +1211,13 @@ function detectAnomaly(
 
     }
 
+
     return {
+
         score,
         anomaly: score >= 40,
         conditions
+
     };
 
 }
@@ -1046,13 +1238,16 @@ function updateGauge(fri) {
             )
         );
 
+
     document.getElementById(
         "gaugeNumber"
     ).textContent =
         safeFRI.toFixed(0);
 
+
     const rotation =
         -90 + (safeFRI * 1.8);
+
 
     document.getElementById(
         "gaugeNeedle"
@@ -1082,22 +1277,32 @@ function updateRiskColor(
             "friFill"
         );
 
+
     if (classification === "HIGH") {
 
-        riskLevel.style.color = "#ff5c5c";
-        friFill.style.background = "#ff5c5c";
+        riskLevel.style.color =
+            "#ff5c5c";
+
+        friFill.style.background =
+            "#ff5c5c";
 
     } else if (
         classification === "MEDIUM"
     ) {
 
-        riskLevel.style.color = "#ffc857";
-        friFill.style.background = "#ffc857";
+        riskLevel.style.color =
+            "#ffc857";
+
+        friFill.style.background =
+            "#ffc857";
 
     } else {
 
-        riskLevel.style.color = "#27c9a5";
-        friFill.style.background = "#27c9a5";
+        riskLevel.style.color =
+            "#27c9a5";
+
+        friFill.style.background =
+            "#27c9a5";
 
     }
 
@@ -1199,7 +1404,10 @@ function updateRecommendations(
     }
 
 
-    if (anomaly.anomaly) {
+    if (
+        anomaly &&
+        anomaly.anomaly
+    ) {
 
         list.innerHTML +=
             "<li><strong>Anomaly detected:</strong> review abnormal environmental conditions.</li>";
@@ -1210,20 +1418,76 @@ function updateRecommendations(
 
 
 /* =========================
+   SIMULATION STATUS
+========================= */
+
+function setSimulationStatus(
+    active,
+    message
+) {
+
+    const dot =
+        document.getElementById(
+            "statusDot"
+        );
+
+    const status =
+        document.getElementById(
+            "simulationStatus"
+        );
+
+    const messageBox =
+        document.getElementById(
+            "simulationMessage"
+        );
+
+
+    if (active) {
+
+        dot.classList.add("active");
+
+        status.textContent =
+            "Simulation Active";
+
+    } else {
+
+        dot.classList.remove("active");
+
+        status.textContent =
+            "Ready";
+
+    }
+
+
+    messageBox.textContent =
+        message;
+
+}
+
+
+/* =========================
    SIMULATION
 ========================= */
 
 function runSimulation() {
+
+    setSimulationStatus(
+        true,
+        "Running simulation..."
+    );
+
 
     const selectedScenario =
         document.getElementById(
             "scenarioSelect"
         ).value;
 
+
     const scenario =
         generateScenario(
             selectedScenario
         );
+
 
     const rainfall =
         scenario.rainfall;
@@ -1241,22 +1505,29 @@ function runSimulation() {
     document.getElementById(
         "rainfall"
     ).textContent =
-        rainfall.toFixed(1) + " mm";
+        rainfall.toFixed(1) +
+        " mm";
+
 
     document.getElementById(
         "waterLevel"
     ).textContent =
-        waterLevel.toFixed(2) + " m";
+        waterLevel.toFixed(2) +
+        " m";
+
 
     document.getElementById(
         "soilMoisture"
     ).textContent =
-        soilMoisture.toFixed(1) + " %";
+        soilMoisture.toFixed(1) +
+        " %";
+
 
     document.getElementById(
         "temperature"
     ).textContent =
-        temperature.toFixed(1) + " °C";
+        temperature.toFixed(1) +
+        " °C";
 
 
     const result =
@@ -1273,7 +1544,9 @@ function runSimulation() {
         result.classification;
 
 
-    if (result.classification === "HIGH") {
+    if (
+        result.classification === "HIGH"
+    ) {
 
         document.getElementById(
             "riskMessage"
@@ -1312,7 +1585,10 @@ function runSimulation() {
         result.fri + "%";
 
 
-    updateGauge(result.fri);
+    updateGauge(
+        result.fri
+    );
+
 
     updateRiskColor(
         result.classification
@@ -1326,10 +1602,12 @@ function runSimulation() {
     ).textContent =
         result.rainfallContribution.toFixed(2);
 
+
     document.getElementById(
         "waterContribution"
     ).textContent =
         result.waterContribution.toFixed(2);
+
 
     document.getElementById(
         "soilContribution"
@@ -1340,17 +1618,22 @@ function runSimulation() {
     document.getElementById(
         "rainContributionBar"
     ).style.width =
-        result.rainfallContribution + "%";
+        result.rainfallContribution +
+        "%";
+
 
     document.getElementById(
         "waterContributionBar"
     ).style.width =
-        result.waterContribution + "%";
+        result.waterContribution +
+        "%";
+
 
     document.getElementById(
         "soilContributionBar"
     ).style.width =
-        result.soilContribution + "%";
+        result.soilContribution +
+        "%";
 
 
     /* Explanation */
@@ -1400,10 +1683,13 @@ function runSimulation() {
         );
 
 
-    if (anomaly.anomaly) {
+    if (
+        anomaly.anomaly
+    ) {
 
         anomalyTitle.textContent =
             "System Status: ANOMALY DETECTED";
+
 
         anomalyMessage.textContent =
             anomaly.conditions.join(" ") +
@@ -1414,6 +1700,7 @@ function runSimulation() {
 
         anomalyTitle.textContent =
             "System Status: NORMAL";
+
 
         if (
             anomaly.conditions.length > 0
@@ -1462,6 +1749,12 @@ function runSimulation() {
 
     drawTrend();
 
+
+    setSimulationStatus(
+        true,
+        "Simulation completed successfully."
+    );
+
 }
 
 
@@ -1477,7 +1770,9 @@ function updateHistory() {
         );
 
 
-    if (riskHistory.length === 0) {
+    if (
+        riskHistory.length === 0
+    ) {
 
         list.innerHTML =
             '<div class="history-item">' +
@@ -1503,6 +1798,7 @@ function updateHistory() {
                         "div"
                     );
 
+
                 div.className =
                     "history-item";
 
@@ -1524,7 +1820,9 @@ function updateHistory() {
                     "</span>";
 
 
-                list.appendChild(div);
+                list.appendChild(
+                    div
+                );
 
             }
         );
@@ -1543,14 +1841,18 @@ function drawTrend() {
             "riskChart"
         );
 
+
     const ctx =
         canvas.getContext("2d");
+
 
     const width =
         canvas.clientWidth;
 
+
     const height =
         canvas.clientHeight;
+
 
     const ratio =
         window.devicePixelRatio || 1;
@@ -1558,6 +1860,7 @@ function drawTrend() {
 
     canvas.width =
         width * ratio;
+
 
     canvas.height =
         height * ratio;
@@ -1577,7 +1880,9 @@ function drawTrend() {
     );
 
 
-    if (riskHistory.length === 0) {
+    if (
+        riskHistory.length === 0
+    ) {
 
         ctx.fillStyle =
             "#91a6c0";
@@ -1588,11 +1893,13 @@ function drawTrend() {
         ctx.textAlign =
             "center";
 
+
         ctx.fillText(
             "No simulation data available",
             width / 2,
             height / 2
         );
+
 
         return;
 
@@ -1601,11 +1908,15 @@ function drawTrend() {
 
     const padding = 30;
 
+
     const graphWidth =
-        width - padding * 2;
+        width -
+        padding * 2;
+
 
     const graphHeight =
-        height - padding * 2;
+        height -
+        padding * 2;
 
 
     ctx.strokeStyle =
@@ -1614,7 +1925,7 @@ function drawTrend() {
     ctx.lineWidth = 1;
 
 
-    [0, 25, 50, 75, 100]
+    [0,25,50,75,100]
         .forEach(
             function(value) {
 
@@ -1653,7 +1964,7 @@ function drawTrend() {
         "right";
 
 
-    [0, 25, 50, 75, 100]
+    [0,25,50,75,100]
         .forEach(
             function(value) {
 
@@ -1705,7 +2016,9 @@ function drawTrend() {
                 graphHeight;
 
 
-            if (index === 0) {
+            if (
+                index === 0
+            ) {
 
                 ctx.moveTo(
                     x,
@@ -1890,6 +2203,9 @@ function resetSystem() {
         "random";
 
 
+    updateScenarioDescription();
+
+
     updateRecommendations(
         "LOW",
         {
@@ -1906,6 +2222,12 @@ function resetSystem() {
 
     drawTrend();
 
+
+    setSimulationStatus(
+        false,
+        "System reset. Ready for simulation."
+    );
+
 }
 
 
@@ -1918,6 +2240,8 @@ window.addEventListener(
     drawTrend
 );
 
+
+updateScenarioDescription();
 
 updateGauge(0);
 

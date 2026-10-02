@@ -767,6 +767,128 @@ Based on the completed experiments, the research can be framed around:
 A supporting question is:
 
 **How effectively can a lightweight, explainable flood-risk model estimate changing flood risk using controlled synthetic environmental conditions without relying on historical datasets?**
+## Experiment 9: Boundary Sensitivity Analysis
+
+### Objective
+
+This experiment evaluates how the FloodGuard-X classification behaves around the predefined FRI boundaries of 40 and 70. It also examines whether small changes in environmental variables produce abrupt changes in the calculated Flood Risk Index (FRI).
+
+### Classification Boundary Test
+
+The LOW/MEDIUM boundary was tested using FRI values from 39.0 to 41.0.
+
+Results:
+
+| FRI | Classification |
+|---:|---|
+| 39.0 | LOW |
+| 39.5 | LOW |
+| 39.9 | LOW |
+| 40.0 | MEDIUM |
+| 40.1 | MEDIUM |
+| 40.5 | MEDIUM |
+| 41.0 | MEDIUM |
+
+The MEDIUM/HIGH boundary was tested using FRI values from 69.0 to 71.0.
+
+Results:
+
+| FRI | Classification |
+|---:|---|
+| 69.0 | MEDIUM |
+| 69.5 | MEDIUM |
+| 69.9 | MEDIUM |
+| 70.0 | HIGH |
+| 70.1 | HIGH |
+| 70.5 | HIGH |
+| 71.0 | HIGH |
+
+The results confirm that the classification rules operate deterministically at the predefined boundaries. A small change around a boundary can change the category because the model uses discrete threshold-based classification.
+
+### Environmental Sensitivity Near the Lower Boundary
+
+Baseline conditions:
+
+- Rainfall = 60 mm
+- Water Level = 2.0 m
+- Soil Moisture = 60%
+- Baseline FRI = 44.00
+- Classification = MEDIUM
+
+Small environmental changes produced the following results:
+
+| Change | FRI | Classification |
+|---|---:|---|
+| Rainfall -5 mm | 42.67 | MEDIUM |
+| Rainfall +5 mm | 45.33 | MEDIUM |
+| Water -0.1 m | 43.20 | MEDIUM |
+| Water +0.1 m | 44.80 | MEDIUM |
+| Soil -5% | 43.00 | MEDIUM |
+| Soil +5% | 45.00 | MEDIUM |
+
+The tested small perturbations changed the numerical FRI gradually while maintaining the same MEDIUM classification.
+
+### Environmental Sensitivity Near the Upper Boundary
+
+Baseline conditions:
+
+- Rainfall = 100 mm
+- Water Level = 3.0 m
+- Soil Moisture = 70%
+- Baseline FRI = 64.67
+- Classification = MEDIUM
+
+Small environmental changes produced the following results:
+
+| Change | FRI | Classification |
+|---|---:|---|
+| Rainfall -5 mm | 63.33 | MEDIUM |
+| Rainfall +5 mm | 66.00 | MEDIUM |
+| Water -0.1 m | 63.87 | MEDIUM |
+| Water +0.1 m | 65.47 | MEDIUM |
+| Soil -5% | 63.67 | MEDIUM |
+| Soil +5% | 65.67 | MEDIUM |
+
+The tested perturbations again produced gradual FRI changes without classification changes. The baseline was below the HIGH threshold, so these tests examine behavior near the upper boundary rather than directly crossing FRI = 70.
+
+### Finding
+
+The boundary sensitivity experiment demonstrates that FloodGuard-X follows deterministic threshold behavior. The FRI changes gradually under small environmental perturbations in the tested ranges, while classification remains stable when the resulting FRI stays within the same threshold interval.
+
+However, values very close to the thresholds may change classification after a small perturbation. Therefore, threshold-based classification provides clear interpretability but can introduce categorical sensitivity near boundary values.
+
+This experiment evaluates mathematical behavior of the proposed model and does not establish whether the selected thresholds correspond to real-world flood warning levels.
+
+---
+
+## Updated Overall Research Findings
+
+The experiments conducted so far indicate that:
+
+1. The FRI calculation is mathematically consistent across the tested synthetic scenarios.
+2. Rainfall and water level have greater model influence than soil moisture under the selected 40/40/20 weighting scheme.
+3. Rainfall and water level produce similar relative contributions under the current normalization and weighting.
+4. Alternative weighting configurations change numerical FRI values while maintaining classifications for the tested scenarios.
+5. The threshold mechanism produces consistent LOW, MEDIUM, and HIGH classifications at the predefined boundaries.
+6. The rule-based anomaly mechanism identifies severe and combined abnormal environmental conditions in the tested scenarios.
+7. The model provides interpretable risk explanations through variable contributions.
+8. Variable influence depends on both the assigned weight and the normalized environmental value.
+9. Simultaneously elevated environmental variables substantially increase the resulting FRI.
+10. The additive model represents combined environmental conditions through accumulation of weighted contributions rather than explicit nonlinear interaction terms.
+11. Small input changes produce gradual FRI changes within the tested local ranges.
+12. No unexpected discontinuities were observed during the local robustness tests.
+13. Boundary analysis confirms that classification changes occur exactly at the predefined FRI thresholds.
+14. Small environmental perturbations generally preserve classification when the resulting FRI remains sufficiently away from a threshold.
+15. The model can become categorically sensitive when FRI values are very close to the predefined thresholds.
+16. Overall, the experiments support the mathematical consistency, interpretability, and controlled behavior of the proposed lightweight model, while emphasizing that its weights, thresholds, anomaly rules, and synthetic scenarios require real-world validation before operational deployment.
+
+### Updated Research Question
+
+**How does the weighting, interaction, and sensitivity of environmental variables affect the stability and interpretability of a lightweight, explainable, dataset-free flood-risk model?**
+
+### Supporting Research Question
+
+**How effectively can a lightweight, explainable flood-risk model estimate changing flood risk using controlled synthetic environmental conditions without relying on historical datasets?**
 
 
 

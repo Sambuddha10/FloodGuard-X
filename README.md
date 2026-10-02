@@ -7,7 +7,7 @@
 </p>
 <p align="center">
 
-  <a href="YOUR-GITHUB-PAGES-LINK">
+  <a href=" https://sambuddha10.github.io/FloodGuard-X/">
     <img src="https://img.shields.io/badge/🌊%20LIVE%20DEMO-6f42c1?style=for-the-badge">
   </a>
 

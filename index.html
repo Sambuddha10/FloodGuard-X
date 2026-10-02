@@ -1,350 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
+<title>FloodGuard-X | Flood Risk Detection</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    <title>FloodGuard-X</title>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(0, 119, 255, 0.18), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(0, 200, 180, 0.12), transparent 30%),
+        #07111f;
+    color: #eaf2ff;
+    min-height: 100vh;
+    padding: 30px 16px;
+}
 
-    <style>
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            color: #1f2937;
-        }
+/* HEADER */
 
-        header {
-            background: #0f172a;
-            color: white;
-            text-align: center;
-            padding: 30px;
-        }
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 38px;
-        }
+.header h1 {
+    font-size: 42px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
 
-        main {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 20px;
-        }
+.header p {
+    color: #9fb2ca;
+    font-size: 16px;
+}
 
-        .box {
-            background: white;
-            padding: 30px;
-            margin-top: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            text-align: center;
-        }
+.badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 7px 14px;
+    border-radius: 30px;
+    background: rgba(0, 150, 255, 0.12);
+    border: 1px solid rgba(0, 180, 255, 0.25);
+    color: #70c9ff;
+    font-size: 13px;
+}
 
-        #riskLevel {
-            font-size: 42px;
-            font-weight: bold;
-            margin: 20px;
-            padding: 15px;
-            border-radius: 10px;
-        }
+/* CARDS */
 
-        .low {
-            background: #dcfce7;
-            color: #166534;
-        }
+.card {
+    background: rgba(14, 29, 48, 0.86);
+    border: 1px solid rgba(130, 170, 210, 0.12);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
 
-        .medium {
-            background: #fef3c7;
-            color: #92400e;
-        }
+.card h2 {
+    font-size: 19px;
+    margin-bottom: 18px;
+}
 
-        .high {
-            background: #fee2e2;
-            color: #991b1b;
-        }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
 
-        .values {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
+/* SENSOR CARDS */
 
-        .value {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
+.sensor {
+    background: rgba(255, 255, 255, 0.035);
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
 
-        .value p {
-            font-size: 25px;
-            font-weight: bold;
-        }
+.sensor-title {
+    color: #91a6c0;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
 
-        select {
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-        }
+.sensor-value {
+    font-size: 25px;
+    font-weight: bold;
+}
 
-        button {
-            margin-top: 15px;
-            padding: 13px 25px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+/* RISK */
 
-        button:hover {
-            background: #1d4ed8;
-        }
+.risk-card {
+    text-align: center;
+    padding: 30px;
+}
 
-        #anomalyStatus {
-            display: inline-block;
-            padding: 12px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
+.risk-level {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 12px 0;
+    letter-spacing: 2px;
+}
 
-        .safe {
-            background: #dcfce7;
-            color: #166534;
-        }
+.risk-message {
+    color: #b5c5d9;
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.6;
+}
 
-        .warning {
-            background: #fee2e2;
-            color: #991b1b;
-        }
+/* FRI */
 
-        /* FRI */
+.fri-container {
+    margin-top: 25px;
+}
 
-        .fri-score {
-            font-size: 48px;
-            font-weight: bold;
-            margin: 15px;
-        }
+.fri-bar {
+    width: 100%;
+    height: 18px;
+    background: #17283d;
+    border-radius: 20px;
+    overflow: hidden;
+}
 
-        .fri-description {
-            color: #64748b;
-            margin-bottom: 25px;
-        }
+.fri-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease;
+    background: linear-gradient(90deg, #27c9a5, #ffc857, #ff5c5c);
+}
 
-        .contributions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
+.fri-value {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
 
-        .contribution {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
+/* SIMULATOR */
 
-        .contribution h3 {
-            margin-top: 0;
-        }
+.controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
 
-        .contribution .number {
-            font-size: 25px;
-            font-weight: bold;
-        }
+select,
+button {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(150,190,230,0.18);
+    font-size: 14px;
+}
 
-        /* EXPLANATION */
+select {
+    background: #101f33;
+    color: white;
+    min-width: 220px;
+}
 
-        .explanation {
-            text-align: left;
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 25px;
-        }
+button {
+    background: #087fff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        .explanation h3 {
-            margin-top: 0;
-        }
+button:hover {
+    background: #0067d8;
+}
 
-        .explanation-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
+.reset-btn {
+    background: #26364a;
+}
 
-        .explanation-row:last-child {
-            border-bottom: none;
-        }
+.reset-btn:hover {
+    background: #344960;
+}
 
-        .explanation-value {
-            font-weight: bold;
-        }
+/* CONTRIBUTIONS */
 
-        .final-explanation {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            background: white;
-            font-weight: bold;
-        }
+.contribution {
+    margin-bottom: 15px;
+}
 
-        /* CHART */
+.contribution-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
 
-        #riskChart {
-            width: 100%;
-            max-width: 800px;
-            height: 300px;
-            display: block;
-            margin: 20px auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            background: white;
-        }
+.contribution-bar {
+    height: 9px;
+    background: #17283d;
+    border-radius: 20px;
+    overflow: hidden;
+}
 
-        #chartMessage {
-            color: #64748b;
-        }
+.contribution-fill {
+    height: 100%;
+    background: #39a9ff;
+    transition: width 0.5s ease;
+}
 
-        /* HISTORY */
+/* ANOMALY */
 
-        .history-item {
-            text-align: left;
-            background: #f8fafc;
-            padding: 15px;
-            margin-top: 10px;
-            border-left: 4px solid #2563eb;
-            border-radius: 8px;
-        }
+.anomaly-box {
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.06);
+}
 
-        footer {
-            text-align: center;
-            padding: 25px;
-        }
+.anomaly-status {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
 
-        @media (max-width: 800px) {
+.anomaly-details {
+    color: #aebed2;
+    line-height: 1.6;
+}
 
-            .values {
-                grid-template-columns: repeat(2, 1fr);
-            }
+/* HISTORY */
 
-            .contributions {
-                grid-template-columns: 1fr;
-            }
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
 
-        }
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.035);
+    color: #c5d4e7;
+    font-size: 14px;
+}
 
-        @media (max-width: 500px) {
+.history-risk {
+    font-weight: bold;
+}
 
-            .values {
-                grid-template-columns: 1fr;
-            }
+/* TREND */
 
-            main {
-                padding: 10px;
-            }
+.trend {
+    height: 220px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 20px 5px 5px;
+    border-bottom: 1px solid #34465c;
+    overflow-x: auto;
+}
 
-            .explanation-row {
-                flex-direction: column;
-                gap: 5px;
-            }
+.trend-bar {
+    min-width: 24px;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(to top, #087fff, #48c6ff);
+    position: relative;
+    transition: height 0.4s ease;
+}
 
-        }
+.trend-bar span {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #a9bdd4;
+}
 
-    </style>
+/* FOOTER */
 
+.footer {
+    text-align: center;
+    color: #70839a;
+    font-size: 13px;
+    margin-top: 30px;
+    padding-bottom: 10px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 20px 10px;
+    }
+
+    .header h1 {
+        font-size: 32px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .risk-level {
+        font-size: 38px;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    select,
+    button {
+        width: 100%;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
+<div class="container">
 
-<header>
-
-    <h1>🌊 FloodGuard-X</h1>
-
-    <p>
-        Flood Risk Detection & Disaster Management System
-    </p>
-
-</header>
-
-
-<main>
+    <header class="header">
+        <h1>🌊 FloodGuard-X</h1>
+        <p>Flood Risk Detection & Disaster Management System</p>
+        <div class="badge">● Dataset-Free • Explainable • Lightweight</div>
+    </header>
 
 
     <!-- CURRENT RISK -->
 
-    <section class="box">
+    <section class="card risk-card">
 
         <h2>Current Flood Risk</h2>
 
-        <div id="riskLevel" class="low">
-            LOW
-        </div>
+        <div id="riskLevel" class="risk-level">LOW</div>
 
-        <p id="riskMessage">
+        <div id="riskMessage" class="risk-message">
             Current conditions indicate a low flood risk.
-        </p>
-
-    </section>
-
-
-    <!-- ENVIRONMENTAL VALUES -->
-
-    <section class="values">
-
-        <div class="value">
-
-            <h3>🌧️ Rainfall</h3>
-
-            <p id="rainfall">
-                20 mm
-            </p>
-
         </div>
 
+        <div class="fri-container">
 
-        <div class="value">
+            <div class="fri-bar">
+                <div id="friFill" class="fri-fill"></div>
+            </div>
 
-            <h3>🌊 Water Level</h3>
-
-            <p id="waterLevel">
-                1.2 m
-            </p>
-
-        </div>
-
-
-        <div class="value">
-
-            <h3>💧 Soil Moisture</h3>
-
-            <p id="soilMoisture">
-                40%
-            </p>
-
-        </div>
-
-
-        <div class="value">
-
-            <h3>🌡️ Temperature</h3>
-
-            <p id="temperature">
-                28°C
-            </p>
+            <div id="friValue" class="fri-value">
+                FRI: 0.00 / 100
+            </div>
 
         </div>
 
@@ -353,222 +377,96 @@
 
     <!-- SIMULATOR -->
 
-    <section class="box">
+    <section class="card">
 
-        <h2>🌊 Flood Risk Simulator</h2>
+        <h2>Flood Risk Simulator</h2>
 
-        <p>
-            Select an environmental scenario:
-        </p>
+        <div class="controls">
 
+            <select id="scenarioSelect">
 
-        <select id="scenarioSelect">
+                <option value="random">Random Scenario</option>
 
-            <option value="random">
-                Random Conditions
-            </option>
+                <option value="normal">
+                    Normal Conditions
+                </option>
 
-            <option value="normal">
-                Normal Conditions
-            </option>
+                <option value="heavy">
+                    Heavy Rainfall
+                </option>
 
-            <option value="heavyRain">
-                Heavy Rainfall
-            </option>
+                <option value="rising">
+                    Rising Water Level
+                </option>
 
-            <option value="risingWater">
-                Rising Water Level
-            </option>
+                <option value="extreme">
+                    Extreme Flood
+                </option>
 
-            <option value="extremeFlood">
-                Extreme Flood
-            </option>
+            </select>
 
-        </select>
+            <button onclick="runSimulation()">
+                Run Simulation
+            </button>
 
+            <button class="reset-btn" onclick="resetSystem()">
+                Reset
+            </button>
 
-        <br>
-
-
-        <button id="runButton">
-            Run Simulation
-        </button>
-
-
-        <p id="simulationResult">
-            Select a scenario and run the simulation.
-        </p>
+        </div>
 
     </section>
 
 
-    <!-- FLOOD RISK INDEX -->
+    <!-- SENSOR VALUES -->
 
-    <section class="box">
+    <section class="card">
 
-        <h2>📐 Flood Risk Index</h2>
+        <h2>Environmental Conditions</h2>
 
-        <div
-            id="friScore"
-            class="fri-score">
+        <div class="grid">
 
-            0.0
-
-        </div>
-
-        <p class="fri-description">
-
-            Weighted environmental risk score
-            from 0 to 100.
-
-        </p>
-
-
-        <div class="contributions">
-
-
-            <div class="contribution">
-
-                <h3>🌧️ Rainfall</h3>
-
-                <div
-                    id="rainfallContribution"
-                    class="number">
-
-                    0.0
-
+            <div class="sensor">
+                <div class="sensor-title">
+                    Rainfall
                 </div>
 
-                <p>
-                    Weight: 40%
-                </p>
-
+                <div id="rainfall" class="sensor-value">
+                    20 mm
+                </div>
             </div>
 
 
-            <div class="contribution">
-
-                <h3>🌊 Water Level</h3>
-
-                <div
-                    id="waterContribution"
-                    class="number">
-
-                    0.0
-
+            <div class="sensor">
+                <div class="sensor-title">
+                    Water Level
                 </div>
 
-                <p>
-                    Weight: 40%
-                </p>
-
+                <div id="waterLevel" class="sensor-value">
+                    1.2 m
+                </div>
             </div>
 
 
-            <div class="contribution">
-
-                <h3>💧 Soil Moisture</h3>
-
-                <div
-                    id="soilContribution"
-                    class="number">
-
-                    0.0
-
+            <div class="sensor">
+                <div class="sensor-title">
+                    Soil Moisture
                 </div>
 
-                <p>
-                    Weight: 20%
-                </p>
-
+                <div id="soilMoisture" class="sensor-value">
+                    40 %
+                </div>
             </div>
 
 
-        </div>
+            <div class="sensor">
+                <div class="sensor-title">
+                    Temperature
+                </div>
 
-
-        <!-- EXPLAINABLE RISK -->
-
-        <div class="explanation">
-
-            <h3>🔍 Why is this risk level?</h3>
-
-
-            <div class="explanation-row">
-
-                <span>
-                    🌧️ Rainfall contribution
-                </span>
-
-                <span
-                    id="explainRainfall"
-                    class="explanation-value">
-
-                    0.0
-
-                </span>
-
-            </div>
-
-
-            <div class="explanation-row">
-
-                <span>
-                    🌊 Water-level contribution
-                </span>
-
-                <span
-                    id="explainWater"
-                    class="explanation-value">
-
-                    0.0
-
-                </span>
-
-            </div>
-
-
-            <div class="explanation-row">
-
-                <span>
-                    💧 Soil-moisture contribution
-                </span>
-
-                <span
-                    id="explainSoil"
-                    class="explanation-value">
-
-                    0.0
-
-                </span>
-
-            </div>
-
-
-            <div class="explanation-row">
-
-                <span>
-                    📊 Total Flood Risk Index
-                </span>
-
-                <span
-                    id="explainTotal"
-                    class="explanation-value">
-
-                    0.0
-
-                </span>
-
-            </div>
-
-
-            <div
-                id="finalExplanation"
-                class="final-explanation">
-
-                Run a simulation to see why
-                the risk level was assigned.
-
+                <div id="temperature" class="sensor-value">
+                    28 °C
+                </div>
             </div>
 
         </div>
@@ -576,367 +474,280 @@
     </section>
 
 
-    <!-- ANOMALY DETECTION -->
+    <!-- CONTRIBUTIONS -->
 
-    <section class="box">
+    <section class="card">
 
-        <h2>⚠️ Anomaly Detection</h2>
+        <h2>FRI Variable Contributions</h2>
 
-        <div
-            id="anomalyStatus"
-            class="safe">
+        <div class="contribution">
 
-            NO ANOMALY
+            <div class="contribution-head">
+                <span>Rainfall — 40%</span>
+                <span id="rainContribution">0.00</span>
+            </div>
+
+            <div class="contribution-bar">
+                <div
+                    id="rainContributionBar"
+                    class="contribution-fill"
+                ></div>
+            </div>
 
         </div>
 
-        <p id="anomalyMessage">
 
-            No unusual environmental conditions detected.
+        <div class="contribution">
 
-        </p>
+            <div class="contribution-head">
+                <span>Water Level — 40%</span>
+                <span id="waterContribution">0.00</span>
+            </div>
 
-    </section>
+            <div class="contribution-bar">
+                <div
+                    id="waterContributionBar"
+                    class="contribution-fill"
+                ></div>
+            </div>
 
-
-    <!-- RISK TREND -->
-
-    <section class="box">
-
-        <h2>📈 Risk Trend</h2>
-
-        <canvas
-            id="riskChart"
-            width="800"
-            height="300">
-        </canvas>
-
-        <p id="chartMessage">
-
-            Run simulations to generate the risk trend.
-
-        </p>
-
-    </section>
+        </div>
 
 
-    <!-- RISK HISTORY -->
+        <div class="contribution">
 
-    <section class="box">
+            <div class="contribution-head">
+                <span>Soil Moisture — 20%</span>
+                <span id="soilContribution">0.00</span>
+            </div>
 
-        <h2>📊 Risk History</h2>
+            <div class="contribution-bar">
+                <div
+                    id="soilContributionBar"
+                    class="contribution-fill"
+                ></div>
+            </div>
 
-        <div id="riskHistory"></div>
+        </div>
 
     </section>
 
 
-</main>
+    <!-- ANOMALY -->
+
+    <section class="card">
+
+        <h2>Anomaly Detection</h2>
+
+        <div class="anomaly-box">
+
+            <div id="anomalyStatus" class="anomaly-status">
+                NORMAL
+            </div>
+
+            <div id="anomalyDetails" class="anomaly-details">
+                No abnormal environmental conditions detected.
+            </div>
+
+        </div>
+
+    </section>
 
 
-<footer>
+    <!-- HISTORY -->
 
-    <p>
-        FloodGuard-X | Disaster Management Research Project
-    </p>
+    <section class="card">
 
-</footer>
+        <h2>Risk History</h2>
+
+        <div id="historyList" class="history-list">
+
+            <div class="history-item">
+                <span>No simulation recorded yet.</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TREND -->
+
+    <section class="card">
+
+        <h2>Risk Trend</h2>
+
+        <div id="trend" class="trend">
+
+            <span style="color:#70839a;">
+                Run simulations to generate the risk trend.
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+        FloodGuard-X • Lightweight Explainable Flood Risk Detection
+    </div>
+
+</div>
 
 
 <script>
 
-
-// =====================================================
-// RISK SCORE STORAGE
-// =====================================================
-
-let riskScores = [];
+let riskHistory = [];
 
 
-// =====================================================
-// BUTTON
-// =====================================================
-
-document
-    .getElementById("runButton")
-    .addEventListener(
-        "click",
-        runSimulation
-    );
-
-
-// =====================================================
-// SCENARIO GENERATOR
-// =====================================================
+/* ---------------------------------------------------------
+   SCENARIO GENERATOR
+--------------------------------------------------------- */
 
 function generateScenario(type) {
-
 
     if (type === "normal") {
 
         return {
-
             rainfall: 20,
-
             waterLevel: 1.2,
-
             soilMoisture: 40,
-
             temperature: 28
-
         };
 
     }
 
-
-    if (type === "heavyRain") {
+    if (type === "heavy") {
 
         return {
-
             rainfall: 110,
-
             waterLevel: 2.2,
-
             soilMoisture: 75,
-
             temperature: 25
-
         };
 
     }
 
-
-    if (type === "risingWater") {
+    if (type === "rising") {
 
         return {
-
             rainfall: 70,
-
             waterLevel: 3.5,
-
             soilMoisture: 85,
-
             temperature: 26
-
         };
 
     }
 
-
-    if (type === "extremeFlood") {
+    if (type === "extreme") {
 
         return {
-
             rainfall: 140,
-
             waterLevel: 4.5,
-
             soilMoisture: 95,
-
             temperature: 24
-
         };
 
     }
-
-
-    // RANDOM
 
     return {
 
-        rainfall:
-            Math.floor(
-                Math.random() * 150
-            ),
+        rainfall: Math.floor(Math.random() * 150),
 
         waterLevel:
-            Number(
-                (
-                    Math.random() * 5
-                ).toFixed(2)
-            ),
+            Math.round(Math.random() * 500) / 100,
 
         soilMoisture:
-            Math.floor(
-                Math.random() * 100
-            ),
+            Math.floor(Math.random() * 100),
 
         temperature:
-            Math.floor(
-                20 +
-                Math.random() * 20
-            )
+            20 + Math.floor(Math.random() * 20)
 
     };
-
 }
 
 
-// =====================================================
-// FLOOD RISK INDEX
-// =====================================================
+/* ---------------------------------------------------------
+   FRI CALCULATION
+--------------------------------------------------------- */
 
-function calculateRisk(
-    rainfall,
-    waterLevel,
-    soilMoisture
-) {
-
-
-    // NORMALIZATION
+function calculateRisk(rainfall, waterLevel, soilMoisture) {
 
     const rainfallScore =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                (rainfall / 150) * 100
-            )
-        );
+        Math.min(100, Math.max(0, rainfall / 150 * 100));
 
+    const waterScore =
+        Math.min(100, Math.max(0, waterLevel / 5 * 100));
 
-    const waterLevelScore =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                (waterLevel / 5) * 100
-            )
-        );
-
-
-    const soilMoistureScore =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                soilMoisture
-            )
-        );
-
-
-    // WEIGHTED CONTRIBUTIONS
+    const soilScore =
+        Math.min(100, Math.max(0, soilMoisture));
 
     const rainfallContribution =
-        rainfallScore * 0.40;
+        0.40 * rainfallScore;
 
+    const waterContribution =
+        0.40 * waterScore;
 
-    const waterLevelContribution =
-        waterLevelScore * 0.40;
+    const soilContribution =
+        0.20 * soilScore;
 
-
-    const soilMoistureContribution =
-        soilMoistureScore * 0.20;
-
-
-    // FINAL FRI
-
-    const riskScore =
+    const fri =
         rainfallContribution +
-        waterLevelContribution +
-        soilMoistureContribution;
-
-
-    // CLASSIFICATION
-
-    let level;
-
-
-    if (riskScore >= 70) {
-
-        level = "HIGH";
-
-    }
-
-    else if (riskScore >= 40) {
-
-        level = "MEDIUM";
-
-    }
-
-    else {
-
-        level = "LOW";
-
-    }
-
+        waterContribution +
+        soilContribution;
 
     return {
-
-        score:
-            Number(
-                riskScore.toFixed(1)
-            ),
-
-        level:
-            level,
-
-        rainfallScore:
-            Number(
-                rainfallScore.toFixed(1)
-            ),
-
-        waterLevelScore:
-            Number(
-                waterLevelScore.toFixed(1)
-            ),
-
-        soilMoistureScore:
-            Number(
-                soilMoistureScore.toFixed(1)
-            ),
-
-        rainfallContribution:
-            Number(
-                rainfallContribution.toFixed(1)
-            ),
-
-        waterLevelContribution:
-            Number(
-                waterLevelContribution.toFixed(1)
-            ),
-
-        soilMoistureContribution:
-            Number(
-                soilMoistureContribution.toFixed(1)
-            )
-
+        fri,
+        rainfallScore,
+        waterScore,
+        soilScore,
+        rainfallContribution,
+        waterContribution,
+        soilContribution
     };
-
 }
 
 
-// =====================================================
-// ANOMALY DETECTION
-// =====================================================
+/* ---------------------------------------------------------
+   CLASSIFICATION
+--------------------------------------------------------- */
 
-function detectAnomaly(
-    rainfall,
-    waterLevel,
-    soilMoisture
-) {
+function classifyRisk(fri) {
 
+    if (fri >= 70) {
+        return "HIGH";
+    }
+
+    if (fri >= 40) {
+        return "MEDIUM";
+    }
+
+    return "LOW";
+}
+
+
+/* ---------------------------------------------------------
+   ANOMALY DETECTION
+--------------------------------------------------------- */
+
+function detectAnomaly(rainfall, waterLevel, soilMoisture) {
 
     let score = 0;
-
-    let messages = [];
-
+    let conditions = [];
 
     if (rainfall >= 120) {
 
         score += 40;
 
-        messages.push(
+        conditions.push(
             "Extremely high rainfall detected."
         );
 
-    }
-
-    else if (rainfall >= 90) {
+    } else if (rainfall >= 90) {
 
         score += 20;
 
-        messages.push(
+        conditions.push(
             "Unusually high rainfall detected."
         );
 
@@ -947,17 +758,15 @@ function detectAnomaly(
 
         score += 40;
 
-        messages.push(
+        conditions.push(
             "Critical water level detected."
         );
 
-    }
-
-    else if (waterLevel >= 3) {
+    } else if (waterLevel >= 3) {
 
         score += 20;
 
-        messages.push(
+        conditions.push(
             "Unusually high water level detected."
         );
 
@@ -968,7 +777,7 @@ function detectAnomaly(
 
         score += 20;
 
-        messages.push(
+        conditions.push(
             "Extremely high soil moisture detected."
         );
 
@@ -976,715 +785,362 @@ function detectAnomaly(
 
 
     return {
-
-        isAnomaly:
-            score >= 40,
-
-        messages:
-            messages
-
+        score,
+        anomaly: score >= 40,
+        conditions
     };
-
 }
 
 
-// =====================================================
-// MAIN SIMULATION
-// =====================================================
+/* ---------------------------------------------------------
+   RUN SIMULATION
+--------------------------------------------------------- */
 
 function runSimulation() {
 
-
-    // GET SCENARIO
-
-    const selected =
-        document
-            .getElementById(
-                "scenarioSelect"
-            )
-            .value;
-
-
-    // GENERATE SCENARIO
+    const selectedScenario =
+        document.getElementById("scenarioSelect").value;
 
     const scenario =
-        generateScenario(
-            selected
+        generateScenario(selectedScenario);
+
+
+    const rainfall =
+        scenario.rainfall;
+
+    const waterLevel =
+        scenario.waterLevel;
+
+    const soilMoisture =
+        scenario.soilMoisture;
+
+    const temperature =
+        scenario.temperature;
+
+
+    document.getElementById("rainfall").textContent =
+        rainfall + " mm";
+
+    document.getElementById("waterLevel").textContent =
+        waterLevel.toFixed(1) + " m";
+
+    document.getElementById("soilMoisture").textContent =
+        soilMoisture + " %";
+
+    document.getElementById("temperature").textContent =
+        temperature + " °C";
+
+
+    const result =
+        calculateRisk(
+            rainfall,
+            waterLevel,
+            soilMoisture
         );
 
 
-    // UPDATE ENVIRONMENTAL VALUES
-
-    document
-        .getElementById("rainfall")
-        .innerText =
-            scenario.rainfall +
-            " mm";
-
-
-    document
-        .getElementById("waterLevel")
-        .innerText =
-            scenario.waterLevel +
-            " m";
-
-
-    document
-        .getElementById("soilMoisture")
-        .innerText =
-            scenario.soilMoisture +
-            "%";
-
-
-    document
-        .getElementById("temperature")
-        .innerText =
-            scenario.temperature +
-            "°C";
-
-
-    // CALCULATE RISK
+    const fri =
+        result.fri;
 
     const risk =
-        calculateRisk(
-
-            scenario.rainfall,
-
-            scenario.waterLevel,
-
-            scenario.soilMoisture
-
-        );
+        classifyRisk(fri);
 
 
-    // =================================================
-    // RISK LEVEL
-    // =================================================
-
-    const riskElement =
-        document.getElementById(
-            "riskLevel"
-        );
+    document.getElementById("riskLevel").textContent =
+        risk;
 
 
-    riskElement.className = "";
+    let message = "";
 
+    if (risk === "HIGH") {
 
-    if (risk.level === "HIGH") {
+        message =
+            "High flood risk detected. Immediate attention is recommended.";
 
-        riskElement.classList.add(
-            "high"
-        );
+    } else if (risk === "MEDIUM") {
 
-    }
+        message =
+            "Moderate flood risk detected. Environmental conditions should be monitored.";
 
-    else if (risk.level === "MEDIUM") {
+    } else {
 
-        riskElement.classList.add(
-            "medium"
-        );
-
-    }
-
-    else {
-
-        riskElement.classList.add(
-            "low"
-        );
+        message =
+            "Current conditions indicate a low flood risk.";
 
     }
 
 
-    riskElement.innerText =
-        risk.level;
+    document.getElementById("riskMessage").textContent =
+        message;
 
 
-    document
-        .getElementById(
-            "riskMessage"
-        )
-        .innerText =
+    /* FRI */
 
-            "Flood Risk Index: " +
-            risk.score +
-            " — " +
-            risk.level;
+    document.getElementById("friValue").textContent =
+        "FRI: " + fri.toFixed(2) + " / 100";
+
+    document.getElementById("friFill").style.width =
+        Math.min(100, fri) + "%";
 
 
-    // =================================================
-    // SIMULATION RESULT
-    // =================================================
+    /* CONTRIBUTIONS */
 
-    document
-        .getElementById(
-            "simulationResult"
-        )
-        .innerText =
+    document.getElementById("rainContribution").textContent =
+        result.rainfallContribution.toFixed(2);
 
-            "Simulation completed. " +
-            "Flood Risk Index: " +
-            risk.score;
+    document.getElementById("waterContribution").textContent =
+        result.waterContribution.toFixed(2);
+
+    document.getElementById("soilContribution").textContent =
+        result.soilContribution.toFixed(2);
 
 
-    // =================================================
-    // FRI DISPLAY
-    // =================================================
+    document.getElementById("rainContributionBar").style.width =
+        result.rainfallContribution + "%";
 
-    document
-        .getElementById(
-            "friScore"
-        )
-        .innerText =
-            risk.score;
+    document.getElementById("waterContributionBar").style.width =
+        result.waterContribution + "%";
+
+    document.getElementById("soilContributionBar").style.width =
+        result.soilContribution + "%";
 
 
-    document
-        .getElementById(
-            "rainfallContribution"
-        )
-        .innerText =
-            risk.rainfallContribution;
-
-
-    document
-        .getElementById(
-            "waterContribution"
-        )
-        .innerText =
-            risk.waterLevelContribution;
-
-
-    document
-        .getElementById(
-            "soilContribution"
-        )
-        .innerText =
-            risk.soilMoistureContribution;
-
-
-    // =================================================
-    // EXPLAINABLE RISK
-    // =================================================
-
-    document
-        .getElementById(
-            "explainRainfall"
-        )
-        .innerText =
-
-            risk.rainfallContribution;
-
-
-    document
-        .getElementById(
-            "explainWater"
-        )
-        .innerText =
-
-            risk.waterLevelContribution;
-
-
-    document
-        .getElementById(
-            "explainSoil"
-        )
-        .innerText =
-
-            risk.soilMoistureContribution;
-
-
-    document
-        .getElementById(
-            "explainTotal"
-        )
-        .innerText =
-            risk.score;
-
-
-    const finalExplanation =
-        document.getElementById(
-            "finalExplanation"
-        );
-
-
-    if (risk.level === "HIGH") {
-
-        finalExplanation.innerText =
-
-            "HIGH risk because the combined " +
-            "weighted environmental factors " +
-            "produced a Flood Risk Index of " +
-            risk.score +
-            ", which is above the HIGH-risk threshold of 70.";
-
-    }
-
-    else if (risk.level === "MEDIUM") {
-
-        finalExplanation.innerText =
-
-            "MEDIUM risk because the combined " +
-            "weighted environmental factors " +
-            "produced a Flood Risk Index of " +
-            risk.score +
-            ", which falls between 40 and 69.9.";
-
-    }
-
-    else {
-
-        finalExplanation.innerText =
-
-            "LOW risk because the combined " +
-            "weighted environmental factors " +
-            "produced a Flood Risk Index of " +
-            risk.score +
-            ", which is below 40.";
-
-    }
-
-
-    // =================================================
-    // ANOMALY
-    // =================================================
+    /* ANOMALY */
 
     const anomaly =
         detectAnomaly(
-
-            scenario.rainfall,
-
-            scenario.waterLevel,
-
-            scenario.soilMoisture
-
+            rainfall,
+            waterLevel,
+            soilMoisture
         );
 
 
-    const anomalyStatus =
-        document.getElementById(
-            "anomalyStatus"
-        );
+    if (anomaly.anomaly) {
 
+        document.getElementById("anomalyStatus").textContent =
+            "⚠ ANOMALY DETECTED";
 
-    const anomalyMessage =
-        document.getElementById(
-            "anomalyMessage"
-        );
+        document.getElementById("anomalyDetails").textContent =
+            "Anomaly Score: " +
+            anomaly.score +
+            " — " +
+            anomaly.conditions.join(" ");
 
+    } else {
 
-    if (anomaly.isAnomaly) {
+        document.getElementById("anomalyStatus").textContent =
+            "NORMAL";
 
-        anomalyStatus.className =
-            "warning";
+        if (anomaly.conditions.length > 0) {
 
-        anomalyStatus.innerText =
-            "ANOMALY DETECTED";
+            document.getElementById("anomalyDetails").textContent =
+                "Anomaly Score: " +
+                anomaly.score +
+                " — " +
+                anomaly.conditions.join(" ");
 
+        } else {
 
-        anomalyMessage.innerText =
-            anomaly.messages.join(" ");
+            document.getElementById("anomalyDetails").textContent =
+                "No abnormal environmental conditions detected.";
 
-    }
-
-    else {
-
-        anomalyStatus.className =
-            "safe";
-
-        anomalyStatus.innerText =
-            "NO ANOMALY";
-
-
-        anomalyMessage.innerText =
-            "No unusual environmental conditions detected.";
+        }
 
     }
 
 
-    // =================================================
-    // RISK HISTORY
-    // =================================================
+    /* HISTORY */
 
-    const history =
-        document.getElementById(
-            "riskHistory"
-        );
+    riskHistory.push({
+        time: new Date().toLocaleTimeString(),
+        fri: fri,
+        risk: risk
+    });
 
+    if (riskHistory.length > 20) {
+        riskHistory.shift();
+    }
 
-    const item =
-        document.createElement(
-            "div"
-        );
-
-
-    item.className =
-        "history-item";
-
-
-    item.innerHTML = `
-
-        <strong>Simulation Recorded</strong>
-
-        <br><br>
-
-        <strong>Time:</strong>
-        ${new Date().toLocaleString()}
-
-        <br>
-
-        <strong>Scenario:</strong>
-        ${selected}
-
-        <br>
-
-        <strong>Rainfall:</strong>
-        ${scenario.rainfall} mm
-
-        <br>
-
-        <strong>Water Level:</strong>
-        ${scenario.waterLevel} m
-
-        <br>
-
-        <strong>Soil Moisture:</strong>
-        ${scenario.soilMoisture}%
-
-        <br>
-
-        <strong>Temperature:</strong>
-        ${scenario.temperature}°C
-
-        <br>
-
-        <strong>Rainfall Contribution:</strong>
-        ${risk.rainfallContribution}
-
-        <br>
-
-        <strong>Water Level Contribution:</strong>
-        ${risk.waterLevelContribution}
-
-        <br>
-
-        <strong>Soil Moisture Contribution:</strong>
-        ${risk.soilMoistureContribution}
-
-        <br>
-
-        <strong>Flood Risk Index:</strong>
-        ${risk.score}
-
-        <br>
-
-        <strong>Risk:</strong>
-        ${risk.level}
-
-        <br>
-
-        <strong>Anomaly:</strong>
-        ${anomaly.isAnomaly ? "YES" : "NO"}
-
-    `;
-
-
-    history.appendChild(item);
-
-
-    // =================================================
-    // RISK TREND
-    // =================================================
-
-    riskScores.push(
-        risk.score
-    );
-
-
-    updateRiskChart();
+    updateHistory();
+    updateTrend();
 
 }
 
 
-// =====================================================
-// RISK TREND GRAPH
-// =====================================================
+/* ---------------------------------------------------------
+   HISTORY
+--------------------------------------------------------- */
 
-function updateRiskChart() {
+function updateHistory() {
 
-
-    const canvas =
-        document.getElementById(
-            "riskChart"
-        );
+    const historyList =
+        document.getElementById("historyList");
 
 
-    const message =
-        document.getElementById(
-            "chartMessage"
-        );
+    if (riskHistory.length === 0) {
 
-
-    if (!canvas) {
+        historyList.innerHTML =
+            '<div class="history-item">' +
+            '<span>No simulation recorded yet.</span>' +
+            '</div>';
 
         return;
-
     }
 
 
-    const ctx =
-        canvas.getContext("2d");
+    historyList.innerHTML = "";
 
 
-    ctx.clearRect(
+    [...riskHistory]
+        .reverse()
+        .forEach(item => {
 
-        0,
+            const div =
+                document.createElement("div");
 
-        0,
+            div.className =
+                "history-item";
 
-        canvas.width,
+            div.innerHTML =
+                "<span>" +
+                item.time +
+                "</span>" +
 
-        canvas.height
+                "<span>" +
+                "FRI " +
+                item.fri.toFixed(2) +
+                "</span>" +
 
-    );
+                "<span class='history-risk'>" +
+                item.risk +
+                "</span>";
 
+            historyList.appendChild(div);
 
-    if (
-        riskScores.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    if (message) {
-
-        message.style.display =
-            "none";
-
-    }
-
-
-    const width =
-        canvas.width;
-
-
-    const height =
-        canvas.height;
-
-
-    const padding = 50;
-
-
-    // AXES
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        padding,
-        padding
-    );
-
-
-    ctx.lineTo(
-        padding,
-        height - padding
-    );
-
-
-    ctx.lineTo(
-        width - padding,
-        height - padding
-    );
-
-
-    ctx.stroke();
-
-
-    // Y-AXIS LABELS
-
-    ctx.font =
-        "14px Arial";
-
-
-    ctx.fillText(
-        "100",
-        10,
-        padding + 5
-    );
-
-
-    ctx.fillText(
-        "50",
-        20,
-        height / 2
-    );
-
-
-    ctx.fillText(
-        "0",
-        25,
-        height - padding
-    );
-
-
-    // GRAPH LINE
-
-    ctx.beginPath();
-
-
-    riskScores.forEach(
-        function(
-            score,
-            index
-        ) {
-
-
-            const x =
-
-                padding +
-
-                (
-                    index /
-                    Math.max(
-                        riskScores.length - 1,
-                        1
-                    )
-                ) *
-
-                (
-                    width -
-                    padding * 2
-                );
-
-
-            const y =
-
-                height -
-                padding -
-
-                (
-                    score / 100
-                ) *
-
-                (
-                    height -
-                    padding * 2
-                );
-
-
-            if (index === 0) {
-
-                ctx.moveTo(
-                    x,
-                    y
-                );
-
-            }
-
-            else {
-
-                ctx.lineTo(
-                    x,
-                    y
-                );
-
-            }
-
-        }
-    );
-
-
-    ctx.stroke();
-
-
-    // POINTS + SCORE LABELS
-
-    riskScores.forEach(
-        function(
-            score,
-            index
-        ) {
-
-
-            const x =
-
-                padding +
-
-                (
-                    index /
-                    Math.max(
-                        riskScores.length - 1,
-                        1
-                    )
-                ) *
-
-                (
-                    width -
-                    padding * 2
-                );
-
-
-            const y =
-
-                height -
-                padding -
-
-                (
-                    score / 100
-                ) *
-
-                (
-                    height -
-                    padding * 2
-                );
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-
-                x,
-
-                y,
-
-                6,
-
-                0,
-
-                Math.PI * 2
-
-            );
-
-
-            ctx.fill();
-
-
-            ctx.font =
-                "12px Arial";
-
-
-            ctx.fillText(
-
-                score,
-
-                x - 8,
-
-                y - 10
-
-            );
-
-        }
-    );
+        });
 
 }
 
+
+/* ---------------------------------------------------------
+   TREND
+--------------------------------------------------------- */
+
+function updateTrend() {
+
+    const trend =
+        document.getElementById("trend");
+
+
+    if (riskHistory.length === 0) {
+
+        trend.innerHTML =
+            '<span style="color:#70839a;">' +
+            'Run simulations to generate the risk trend.' +
+            '</span>';
+
+        return;
+    }
+
+
+    trend.innerHTML = "";
+
+
+    riskHistory.forEach(item => {
+
+        const bar =
+            document.createElement("div");
+
+        bar.className =
+            "trend-bar";
+
+        bar.style.height =
+            Math.max(5, item.fri * 1.8) + "px";
+
+
+        const label =
+            document.createElement("span");
+
+        label.textContent =
+            item.fri.toFixed(0);
+
+
+        bar.appendChild(label);
+
+        trend.appendChild(bar);
+
+    });
+
+}
+
+
+/* ---------------------------------------------------------
+   RESET
+--------------------------------------------------------- */
+
+function resetSystem() {
+
+    riskHistory = [];
+
+    document.getElementById("riskLevel").textContent =
+        "LOW";
+
+    document.getElementById("riskMessage").textContent =
+        "Current conditions indicate a low flood risk.";
+
+    document.getElementById("friValue").textContent =
+        "FRI: 0.00 / 100";
+
+    document.getElementById("friFill").style.width =
+        "0%";
+
+
+    document.getElementById("rainfall").textContent =
+        "20 mm";
+
+    document.getElementById("waterLevel").textContent =
+        "1.2 m";
+
+    document.getElementById("soilMoisture").textContent =
+        "40 %";
+
+    document.getElementById("temperature").textContent =
+        "28 °C";
+
+
+    document.getElementById("rainContribution").textContent =
+        "0.00";
+
+    document.getElementById("waterContribution").textContent =
+        "0.00";
+
+    document.getElementById("soilContribution").textContent =
+        "0.00";
+
+
+    document.getElementById("rainContributionBar").style.width =
+        "0%";
+
+    document.getElementById("waterContributionBar").style.width =
+        "0%";
+
+    document.getElementById("soilContributionBar").style.width =
+        "0%";
+
+
+    document.getElementById("anomalyStatus").textContent =
+        "NORMAL";
+
+    document.getElementById("anomalyDetails").textContent =
+        "No abnormal environmental conditions detected.";
+
+
+    updateHistory();
+    updateTrend();
+
+}
 
 </script>
 
-
 </body>
-
 </html>

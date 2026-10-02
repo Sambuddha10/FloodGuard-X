@@ -642,5 +642,131 @@ Based on the completed experiments, the research can be framed around:
 A supporting question is:
 
 **How effectively can a lightweight, explainable flood-risk model estimate changing flood risk using controlled synthetic environmental conditions without relying on historical datasets?**
+# Experiment 8: Robustness Analysis
+
+## Objective
+
+To evaluate whether small changes in environmental input values produce gradual and consistent changes in the Flood Risk Index (FRI).
+
+This experiment examines the local robustness of the model around a predefined baseline condition.
+
+## Baseline Conditions
+
+* Rainfall = 60 mm
+* Water Level = 2.0 m
+* Soil Moisture = 60%
+* Baseline FRI = 44.00
+
+## Method
+
+Each environmental variable was independently perturbed around the baseline while the other variables were kept constant.
+
+The following ranges were tested:
+
+* Rainfall: 50–70 mm
+* Water Level: 1.8–2.2 m
+* Soil Moisture: 50–70%
+
+The resulting FRI values were compared with the baseline FRI.
+
+## Rainfall Perturbation
+
+| Rainfall (mm) |   FRI | Change from Baseline |
+| ------------: | ----: | -------------------: |
+|            50 | 41.33 |                -2.67 |
+|            55 | 42.67 |                -1.33 |
+|            60 | 44.00 |                +0.00 |
+|            65 | 45.33 |                +1.33 |
+|            70 | 46.67 |                +2.67 |
+
+The FRI increased gradually as rainfall increased and decreased gradually as rainfall decreased.
+
+## Water Level Perturbation
+
+| Water Level (m) |   FRI | Change from Baseline |
+| --------------: | ----: | -------------------: |
+|             1.8 | 42.40 |                -1.60 |
+|             1.9 | 43.20 |                -0.80 |
+|             2.0 | 44.00 |                +0.00 |
+|             2.1 | 44.80 |                +0.80 |
+|             2.2 | 45.60 |                +1.60 |
+
+The FRI changed gradually as the water level was varied around the baseline.
+
+## Soil Moisture Perturbation
+
+| Soil Moisture (%) |   FRI | Change from Baseline |
+| ----------------: | ----: | -------------------: |
+|                50 | 42.00 |                -2.00 |
+|                55 | 43.00 |                -1.00 |
+|                60 | 44.00 |                +0.00 |
+|                65 | 45.00 |                +1.00 |
+|                70 | 46.00 |                +2.00 |
+
+The FRI also changed gradually with changes in soil moisture.
+
+## Finding
+
+The experiment showed that small changes in the environmental inputs produced gradual changes in the FRI within the tested ranges.
+
+For a rainfall change of ±5 mm, the FRI changed by approximately ±1.33.
+
+For a water-level change of ±0.1 m, the FRI changed by approximately ±0.80.
+
+For a soil-moisture change of ±5%, the FRI changed by approximately ±1.00.
+
+No unexpected discontinuities were observed in the tested ranges.
+
+This indicates that the current FRI calculation behaves smoothly around the selected baseline condition.
+
+## Interpretation
+
+The robustness behavior is consistent with the additive mathematical structure of the model.
+
+Because the normalized inputs are combined using fixed weights, small changes in an individual input produce proportional changes in its contribution to the FRI, provided the input remains within the normal operating range and does not encounter a normalization boundary.
+
+## Limitation
+
+This experiment evaluates local robustness around only one baseline condition and within limited input ranges.
+
+It does not establish robustness across the entire possible environmental input space.
+
+Additional testing would be required near normalization limits, classification boundaries, and extreme environmental conditions.
+
+---
+
+# Updated Overall Research Findings
+
+The eight experiments provide an initial evaluation of the FloodGuard-X model.
+
+The experiments demonstrate that:
+
+1. The FRI calculation consistently applies the predefined mathematical model.
+2. Rainfall and water level have greater model influence than soil moisture under the current weighting structure.
+3. Rainfall and water level show similar relative contributions across the tested scenarios.
+4. Alternative rainfall and water-level weights change numerical FRI values while the tested scenarios retain their original risk categories.
+5. The LOW/MEDIUM and MEDIUM/HIGH classification boundaries operate consistently.
+6. The rule-based anomaly mechanism can identify severe or combined unusual environmental conditions.
+7. The model provides interpretable explanations for risk, anomaly detection, and variable contributions.
+8. Variable influence depends on both the assigned weight and the normalized environmental value.
+9. Simultaneously elevated environmental variables can substantially increase the final FRI.
+10. The current additive model represents combined conditions through the accumulation of weighted variable contributions.
+11. Small changes in environmental inputs produce gradual FRI changes within the tested local ranges.
+12. No unexpected discontinuities were observed during the robustness experiment.
+
+These findings describe the behavior of the proposed model under controlled synthetic conditions and should not be interpreted as evidence of real-world predictive accuracy.
+
+---
+
+# Updated Research Question
+
+Based on the completed experiments, the research can be framed around:
+
+**How does the weighting, interaction, and sensitivity of environmental variables affect the stability and interpretability of a lightweight, explainable, dataset-free flood-risk model?**
+
+A supporting question is:
+
+**How effectively can a lightweight, explainable flood-risk model estimate changing flood risk using controlled synthetic environmental conditions without relying on historical datasets?**
+
 
 
